@@ -4,10 +4,12 @@ agent_selector_update_manifest.py — called by agent_selector.sh to update agen
 Usage: python3 agent_selector_update_manifest.py <manifest_path> <agent_id> <new_theme> <new_variant>
 
 Updates `active_theme` and `active_variant` fields for the specified agent,
-and the corresponding row in the Active Agents quick-reference table.
+the corresponding row in the Active Agents quick-reference table,
+and the Available Agents table in .github/copilot-instructions.md (persona/title/capabilities).
 """
 import sys
 import re
+from pathlib import Path
 
 manifest_path = sys.argv[1]
 agent_id      = sys.argv[2]
@@ -49,3 +51,44 @@ content = re.sub(
 
 with open(manifest_path, 'w') as f:
     f.write(content)
+
+# ---------------------------------------------------------------------------
+# Update Available Agents table in .github/copilot-instructions.md
+# Derive repo root from manifest path: _bmad/custom_agents/agent_manifest.md
+# ---------------------------------------------------------------------------
+manifest_file = Path(manifest_path).resolve()
+repo_root     = manifest_file.parent.parent.parent   # _bmad/custom_agents -> _bmad -> root
+active_file   = manifest_file.parent / "active" / f"{agent_id}.md"
+ci_file       = repo_root / ".github" / "copilot-instructions.md"
+
+if active_file.exists() and ci_file.exists():
+    agent_content = active_file.read_text(encoding="utf-8")
+
+    # Parse name, title, capabilities from the <agent> XML opening tag
+    agent_tag_m = re.search(r'<agent\s([^>]*)>', agent_content, re.DOTALL)
+    if agent_tag_m:
+        tag_attrs = agent_tag_m.group(1)
+        name_m  = re.search(r'name="([^"]*)"',         tag_attrs)
+        title_m = re.search(r'title="([^"]*)"',        tag_attrs)
+        caps_m  = re.search(r'capabilities="([^"]*)"', tag_attrs)
+
+        new_persona = name_m.group(1)  if name_m  else None
+        new_title   = title_m.group(1) if title_m else None
+        new_caps    = caps_m.group(1)  if caps_m  else None
+
+        if new_persona and new_title:
+            ci_content = ci_file.read_text(encoding="utf-8")
+
+            # Table row format: | agent_id | Persona | Title | Capabilities |
+            def replace_ci_row(m):
+                caps_col = f" {new_caps} " if new_caps else m.group(2)
+                return f"| {m.group(1)}| {new_persona} | {new_title} |{caps_col}|"
+
+            new_ci = re.sub(
+                r'\|\s*(' + re.escape(agent_id) + r'\s*)\|\s*[^|]*\|\s*[^|]*\|\s*([^|]*)\|',
+                replace_ci_row,
+                ci_content
+            )
+
+            if new_ci != ci_content:
+                ci_file.write_text(new_ci, encoding="utf-8")
