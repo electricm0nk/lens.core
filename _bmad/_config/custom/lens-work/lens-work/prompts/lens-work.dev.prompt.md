@@ -6,11 +6,11 @@
 Route to the dev phase workflow via the @lens phase router.
 Orchestrates the full implementation cycle for an epic: iterates all stories, implements each with per-task commits, runs adversarial review after each story, fixes issues, then continues to the next story.
 
-## Implementation Target — NOT bmad.lens.release
+## Implementation Target — NOT lens.core
 
-**⚠️ CRITICAL:** `bmad.lens.release` is a **READ-ONLY authority repo**. It contains BMAD framework code (agents, workflows, lifecycle definitions). It is **NEVER** the implementation target.
+**⚠️ CRITICAL:** `lens.core` is a **READ-ONLY authority repo**. It contains BMAD framework code (agents, workflows, lifecycle definitions). It is **NEVER** the implementation target.
 
-The implementation target is the **TargetProject repo** — resolved from `initiative.target_repos[0].local_path` in the initiative config. All code changes, file creation, commits, and PRs go to the TargetProject repo. If you find yourself writing files inside `bmad.lens.release/`, STOP — you are in the wrong repo.
+The implementation target is the **TargetProject repo** — resolved from `initiative.target_repos[0].local_path` in the initiative config. All code changes, file creation, commits, and PRs go to the TargetProject repo. If you find yourself writing files inside `lens.core/`, STOP — you are in the wrong repo.
 
 ## Inputs
 
@@ -20,9 +20,9 @@ The implementation target is the **TargetProject repo** — resolved from `initi
 ## Execution
 
 1. **Authority Repo Health Check** (read-only — NO writes to these repos):
-   1. Execute shared preflight from `_bmad/lens-work/workflows/includes/preflight.md`. This is a health check only — `bmad.lens.release` is NOT the implementation target.
+   1. Execute shared preflight from `_bmad/lens-work/workflows/includes/preflight.md`. This is a health check only — `lens.core` is NOT the implementation target.
    2. If preflight reports missing authority repos, stop and direct the user to run `/onboard` first.
-2. Load `lifecycle.yaml` from the lens-work module (read from `bmad.lens.release` — read-only)
+2. Load `lifecycle.yaml` from the lens-work module (read from `lens.core` — read-only)
 3. Invoke phase routing for `dev`:
    - Validate predecessor `sprintplan` PR is merged
    - Validate audience level is `base` (promotion from large required)
@@ -31,15 +31,15 @@ The implementation target is the **TargetProject repo** — resolved from `initi
    - `epic_number`: the epic number provided by the user
    - `special_instructions`: the optional special instructions provided by the user (empty string if none)
 
-## Write Scope — Target Repo Only (NOT bmad.lens.release)
+## Write Scope — Target Repo Only (NOT lens.core)
 
 During `/dev`, ALL implementation writes (file creation, modification, commits) are **strictly scoped to the TargetProject repo folder** resolved from `initiative.target_repos[0].local_path`. The agent MUST NOT modify files in:
-- `bmad.lens.release/` (read-only framework — NEVER an implementation target)
+- `lens.core/` (read-only framework — NEVER an implementation target)
 - The control repo (bmad.lens.bmad) except `_bmad-output/` state tracking
 - The governance repo
 - `.github/` adapter layer
 
-**Dev Write Guard:** Before implementing any task, the workflow runs a hard gate (Step 3.Nc) that verifies the working directory is inside the TargetProject repo. If the working directory resolves to `bmad.lens.release/` or any other non-target path, implementation is **BLOCKED**. The guard also rejects any `target_path` that contains `bmad.lens.release`.
+**Dev Write Guard:** Before implementing any task, the workflow runs a hard gate (Step 3.Nc) that verifies the working directory is inside the TargetProject repo. If the working directory resolves to `lens.core/` or any other non-target path, implementation is **BLOCKED**. The guard also rejects any `target_path` that contains `lens.core`.
 
 ## Epic-Level Story Loop
 

@@ -28,10 +28,10 @@ Run preflight before executing this workflow:
 
 ### Step 2: Check Remote Version
 
-1. Attempt to read the latest version from `bmad.lens.release` repo
+1. Attempt to read the latest version from `lens.core` repo
 2. Methods (in order of preference):
    a. Check git tags matching semver pattern on the release remote
-   b. Read `module.yaml` from the default branch of `bmad.lens.release` via `git show` or remote read
+   b. Read `module.yaml` from the default branch of `lens.core` via `git show` or remote read
 3. Store as `latest_version`
 4. If remote is unavailable: report local version only with note about remote check failure
 
@@ -69,7 +69,7 @@ The version check output is appended to the `/help` command response at the bott
 ### Prerequisites
 
 - A newer module version is available (confirmed by version check above)
-- User has access to `bmad.lens.release` repo
+- User has access to `lens.core` repo
 
 ### Step 4: Confirm Update
 
@@ -88,8 +88,8 @@ Proceed with update? (y/n)
 To update, pull the latest release module content:
 
 1. Navigate to your control repo
-2. Copy the updated module files from bmad.lens.release:
-   - Source: bmad.lens.release/_bmad/lens-work/
+2. Copy the updated module files from lens.core:
+   - Source: lens.core/_bmad/lens-work/
    - Destination: {control_repo}/_bmad/lens-work/
 
 ⚠️ This will overwrite module files only — your initiative data is preserved.
@@ -156,6 +156,6 @@ Check control repo structure against new module expectations:
 ## Key Constraints
 
 - Version from `module.yaml` is the single source of truth
-- Remote check uses git tags from `bmad.lens.release` (semver tags)
+- Remote check uses git tags from `lens.core` (semver tags)
 - Graceful degradation when remote is unavailable
 - GUIDED flow — user confirms actions, @lens does not auto-apply

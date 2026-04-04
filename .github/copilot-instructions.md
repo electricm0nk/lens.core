@@ -3,12 +3,12 @@
 
 ## Project Configuration
 
-- **Project**: bmad.lens.release
+- **Project**: lens.core
 - **User**: CrisWeber
 - **Communication Language**: English
 - **Document Output Language**: English
 - **User Skill Level**: intermediate
-- **Output Folder**: bmad.lens.release/_bmad-output
+- **Output Folder**: lens.core/_bmad-output
 - **Planning Artifacts**: {project-root}/_bmad-output/planning-artifacts
 - **Implementation Artifacts**: {project-root}/_bmad-output/implementation-artifacts
 - **Project Knowledge**: {project-root}/docs

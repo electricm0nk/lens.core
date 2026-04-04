@@ -6,7 +6,7 @@
 ## Pre-conditions
 
 - Control repo is a git repository with a remote configured
-- `bmad.lens.release/_bmad/lens-work/` is accessible
+- `lens.core/_bmad/lens-work/` is accessible
 
 ## Steps
 

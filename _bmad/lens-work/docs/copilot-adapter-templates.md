@@ -12,24 +12,24 @@ This is the template for the `.github/copilot-instructions.md` file that gets in
 
 This control repo uses the LENS Workbench module from the release payload:
 
-- **Module path:** `bmad.lens.release/_bmad/lens-work/`
-- **Lifecycle contract:** `bmad.lens.release/_bmad/lens-work/lifecycle.yaml`
-- **Module version:** See `bmad.lens.release/_bmad/lens-work/module.yaml`
+- **Module path:** `lens.core/_bmad/lens-work/`
+- **Lifecycle contract:** `lens.core/_bmad/lens-work/lifecycle.yaml`
+- **Module version:** See `lens.core/_bmad/lens-work/module.yaml`
 
 ## Agent
 
 The `@lens` agent is defined at `.github/agents/lens.agent.md` and references
-the module agent at `bmad.lens.release/_bmad/lens-work/agents/lens.agent.md`.
+the module agent at `lens.core/_bmad/lens-work/agents/lens.agent.md`.
 
 ## Skills (by path reference)
 
 | Skill | Path |
 |-------|------|
-| git-state | `bmad.lens.release/_bmad/lens-work/skills/git-state.md` |
-| git-orchestration | `bmad.lens.release/_bmad/lens-work/skills/git-orchestration.md` |
-| constitution | `bmad.lens.release/_bmad/lens-work/skills/constitution.md` |
-| sensing | `bmad.lens.release/_bmad/lens-work/skills/sensing.md` |
-| checklist | `bmad.lens.release/_bmad/lens-work/skills/checklist.md` |
+| git-state | `lens.core/_bmad/lens-work/skills/git-state.md` |
+| git-orchestration | `lens.core/_bmad/lens-work/skills/git-orchestration.md` |
+| constitution | `lens.core/_bmad/lens-work/skills/constitution.md` |
+| sensing | `lens.core/_bmad/lens-work/skills/sensing.md` |
+| checklist | `lens.core/_bmad/lens-work/skills/checklist.md` |
 
 ## Important
 
@@ -59,24 +59,24 @@ Thin adapter that activates the LENS Workbench agent from the release module.
 ## Module Agent Reference
 
 The full agent definition lives at:
-`bmad.lens.release/_bmad/lens-work/agents/lens.agent.yaml`
+`lens.core/_bmad/lens-work/agents/lens.agent.yaml`
 
 ## Available Commands
 
-See `bmad.lens.release/_bmad/lens-work/module-help.csv` for the complete command list.
+See `lens.core/_bmad/lens-work/module-help.csv` for the complete command list.
 
 ## Skills (path references)
 
-- [git-state](bmad.lens.release/_bmad/lens-work/skills/git-state.md)
-- [git-orchestration](bmad.lens.release/_bmad/lens-work/skills/git-orchestration.md)
-- [constitution](bmad.lens.release/_bmad/lens-work/skills/constitution.md)
-- [sensing](bmad.lens.release/_bmad/lens-work/skills/sensing.md)
-- [checklist](bmad.lens.release/_bmad/lens-work/skills/checklist.md)
+- [git-state](lens.core/_bmad/lens-work/skills/git-state.md)
+- [git-orchestration](lens.core/_bmad/lens-work/skills/git-orchestration.md)
+- [constitution](lens.core/_bmad/lens-work/skills/constitution.md)
+- [sensing](lens.core/_bmad/lens-work/skills/sensing.md)
+- [checklist](lens.core/_bmad/lens-work/skills/checklist.md)
 
 ## Lifecycle Contract
 
 All lifecycle semantics are defined in:
-`bmad.lens.release/_bmad/lens-work/lifecycle.yaml`
+`lens.core/_bmad/lens-work/lifecycle.yaml`
 
 This agent does NOT hardcode any lifecycle rules — everything is derived from the contract.
 ```

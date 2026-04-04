@@ -1,6 +1,6 @@
 # Source-to-Release Promotion Pipeline
 
-**Purpose:** Promote validated module source from `bmad.lens.bmad/bmad.lens.src` to `bmad.lens.release` (alpha → beta PR).
+**Purpose:** Promote validated module source from `bmad.lens.bmad/bmad.lens.src` to `lens.core` (alpha → beta PR).
 
 ## Workflow Location
 
@@ -17,7 +17,7 @@ push to master (bmad.lens.src/_bmad/lens-work/**)
   ├─ Validate required files exist
   ├─ Read module version from module.yaml
   │
-  ├─ Clone bmad.lens.release → checkout alpha
+  ├─ Clone lens.core → checkout alpha
   ├─ Delete existing _bmad/lens-work/ contents
   ├─ Copy finalized output from bmad.lens.src/_bmad/lens-work/
   ├─ Commit & push to alpha
@@ -42,7 +42,7 @@ push to master (bmad.lens.src/_bmad/lens-work/**)
 
 | Source | Release (alpha branch) |
 |--------|---------|
-| `bmad.lens.src/_bmad/lens-work/` | `bmad.lens.release/_bmad/lens-work/` |
+| `bmad.lens.src/_bmad/lens-work/` | `lens.core/_bmad/lens-work/` |
 
 ### Included in promotion:
 - `lifecycle.yaml`, `module.yaml`, `module-help.csv`, `README.md`
@@ -68,7 +68,7 @@ The pipeline is idempotent — re-running produces the same result. The `rm -rf`
 
 ## Security
 
-- Release repo push requires `RELEASE_REPO_TOKEN` secret (PAT with `repo` scope on `bmad.lens.release`)
+- Release repo push requires `RELEASE_REPO_TOKEN` secret (PAT with `repo` scope on `lens.core`)
 - Pipeline runs as `github-actions[bot]` — no human credentials in git history
 - Executable file scan enforces NFR11 at CI level
 - Token is never logged; used only in `git clone` auth and API calls
@@ -77,4 +77,4 @@ The pipeline is idempotent — re-running produces the same result. The `rm -rf`
 
 | Secret | Purpose |
 |--------|---------|
-| `RELEASE_REPO_TOKEN` | PAT with `repo` scope on `bmad.lens.release` — enables clone, push, and PR creation |
+| `RELEASE_REPO_TOKEN` | PAT with `repo` scope on `lens.core` — enables clone, push, and PR creation |

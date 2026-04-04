@@ -116,7 +116,7 @@ Only `{root}` and `{root}-small` are created at init. Higher audience branches a
 | Domain | Location | Write Authority |
 |--------|----------|----------------|
 | Control Repo | `_bmad-output/lens-work/` | @lens writes initiative artifacts |
-| Release Module | `bmad.lens.release/_bmad/lens-work/` | Module builder only (read-only at runtime) |
+| Release Module | `lens.core/_bmad/lens-work/` | Module builder only (read-only at runtime) |
 | Copilot Adapter | `.github/` | User only (not modified during initiative work) |
 | Governance | `TargetProjects/lens/lens-governance/` | Governance leads only (via governance repo PRs) |
 

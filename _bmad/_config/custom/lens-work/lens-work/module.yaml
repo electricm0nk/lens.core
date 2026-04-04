@@ -1,5 +1,5 @@
 # LENS Workbench Module Configuration v2.0
-# Source repo — CI/CD promotes to bmad.lens.release
+# Source repo — CI/CD promotes to lens.core
 
 code: lens-work
 name: "LENS Workbench"

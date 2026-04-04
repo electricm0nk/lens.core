@@ -47,5 +47,5 @@ The onboard workflow handles:
 ## Prerequisites
 
 - Control repo must be a git repository with a remote configured
-- `bmad.lens.release/_bmad/lens-work/` must be accessible (release module)
+- `lens.core/_bmad/lens-work/` must be accessible (release module)
 - `git` available in PATH

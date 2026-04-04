@@ -3,7 +3,7 @@
 #
 # PURPOSE:
 #   Bootstraps a new control repo by cloning all required authority domains:
-#   - bmad.lens.release   → Release module (read-only dependency)
+#   - lens.core   → Release module (read-only dependency)
 #   - bmad.lens.copilot   → Copilot adapter (.github/ content)
 #   - lens-governance     → Governance repo (constitutional authority)
 #
@@ -24,7 +24,7 @@ param(
 
     [string]$ReleaseOrg,
 
-    [string]$ReleaseRepo = "bmad.lens.release",
+    [string]$ReleaseRepo = "lens.core",
 
     [string]$ReleaseBranch = "beta",
 
@@ -146,7 +146,7 @@ function Ensure-GitIgnoreEntries {
     $entries = @(
         "_bmad-output/lens-work/personal/",
         ".github/",
-        "bmad.lens.release/",
+        "lens.core/",
         "TargetProjects/"
     )
 

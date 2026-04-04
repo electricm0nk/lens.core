@@ -124,13 +124,13 @@ output: |
   ├── Repo: ${session.target_repo.name}
   └── Path: ${session.target_path}
 
-# === HARD REJECTION: bmad.lens.release is NEVER a valid implementation target ===
+# === HARD REJECTION: lens.core is NEVER a valid implementation target ===
 # The target_path MUST point to a TargetProject repo, never the release framework repo.
-if session.target_path contains "bmad.lens.release":
+if session.target_path contains "lens.core":
   FAIL: |
-    ❌ INVALID TARGET — bmad.lens.release is a READ-ONLY authority repo.
+    ❌ INVALID TARGET — lens.core is a READ-ONLY authority repo.
     ├── Resolved target_path: ${session.target_path}
-    ├── bmad.lens.release contains BMAD framework code (agents, workflows, lifecycle)
+    ├── lens.core contains BMAD framework code (agents, workflows, lifecycle)
     ├── It is NEVER the implementation target for /dev
     └── Fix: Update initiative.target_repos to point to the actual TargetProject repo path.
     
@@ -600,7 +600,7 @@ if actual_branch != story_branch:
     └── Epic branch receives code ONLY via story→epic PR merges
 
 output: |
-  📂 Target Repo Ready — ALL implementation goes here (NOT bmad.lens.release)
+  📂 Target Repo Ready — ALL implementation goes here (NOT lens.core)
   ├── Repo: ${target_repo.name}
   ├── Path: ${target_path}
   ├── Initiative: ${initiative_id}
@@ -612,14 +612,14 @@ output: |
   ├── Auto-commit: ON (tasks auto-committed after completion)
   ├── Auto-PR: ON (PR created after code review, no wait)
   ├── ⚠️  Commits go to STORY branch only — epic branch is merge-only
-  └── ⚠️  bmad.lens.release is READ-ONLY — never write there
+  └── ⚠️  lens.core is READ-ONLY — never write there
 ```
 
 #### 3.Nc. Verify Working Directory — Dev Write Guard
 
 ```yaml
 # HARD GATE: Verify we are inside the TargetProject repo before implementation begins.
-# bmad.lens.release is a READ-ONLY authority repo — NEVER the implementation target.
+# lens.core is a READ-ONLY authority repo — NEVER the implementation target.
 # The dev-write-guard in git-orchestration.md enforces that ALL /dev writes
 # are scoped to session.target_path. This step ensures the working directory
 # is set correctly before the agent starts implementing tasks.
@@ -631,12 +631,12 @@ actual_dir = exec("pwd").stdout.trim()
 target_canonical = canonicalize(session.target_path)
 actual_canonical = canonicalize(actual_dir)
 
-# Explicit rejection: if working directory is inside bmad.lens.release, HARD FAIL
-if actual_canonical contains "bmad.lens.release":
+# Explicit rejection: if working directory is inside lens.core, HARD FAIL
+if actual_canonical contains "lens.core":
   FAIL: |
-    ❌ Dev Write Guard — BLOCKED: Working directory is inside bmad.lens.release
+    ❌ Dev Write Guard — BLOCKED: Working directory is inside lens.core
     ├── Actual: ${actual_dir}
-    ├── bmad.lens.release is a READ-ONLY authority repo
+    ├── lens.core is a READ-ONLY authority repo
     ├── It contains BMAD framework code, NOT implementation targets
     └── Implementation MUST happen in: ${session.target_path}
 
@@ -651,7 +651,7 @@ output: |
   🔒 Dev Write Guard — PASSED
   ├── Working directory: ${actual_dir}
   ├── Scoped to TargetProject repo: ${session.target_path}
-  └── ⚠️  bmad.lens.release is READ-ONLY — never write there
+  └── ⚠️  lens.core is READ-ONLY — never write there
 ```
 
 #### 4.N. Implementation Guidance + Constitutional Context + Special Instructions
@@ -672,7 +672,7 @@ override_count = count_entries(complexity_tracking) if complexity_tracking else 
 🔧 Implementation Mode — Story ${story_idx + 1}/${session.story_files.length}
 
 You're now working in: ${target_path}
-⚠️  THIS is the TargetProject repo — NOT bmad.lens.release (which is read-only).
+⚠️  THIS is the TargetProject repo — NOT lens.core (which is read-only).
 
 ${if session.special_instructions}
 ═══ Special Instructions (User-Provided) ═══
@@ -749,7 +749,7 @@ ${endif}
 - NEVER commit directly to `${epic_branch}` — epic branch receives code ONLY via merged PRs
 
 **Remember:**
-- ALL file writes go to ${target_path} (the TargetProject repo) — NEVER to bmad.lens.release
+- ALL file writes go to ${target_path} (the TargetProject repo) — NEVER to lens.core
 - ALL commits go to the STORY branch — NEVER to the epic or integration branch
 - Follow constitutional articles above during implementation
 - Follow special instructions (if provided) for all implementation decisions
@@ -1211,10 +1211,10 @@ Throughout `/dev`, the user may work in TargetProjects for actual coding, but al
 |--------|----------|------|
 | Write code / create files | TargetProjects/${repo} (session.target_path) | **ONLY here** |
 | Run /dev commands | BMAD directory | Control plane |
-| Read framework files | bmad.lens.release/ | **READ-ONLY — never write here** |
+| Read framework files | lens.core/ | **READ-ONLY — never write here** |
 | State tracking writes | _bmad-output/ | Sprint status, initiative config |
 
-**⚠️ bmad.lens.release is NEVER the implementation target.** It is a read-only authority repo containing BMAD framework code.
+**⚠️ lens.core is NEVER the implementation target.** It is a read-only authority repo containing BMAD framework code.
 | Code review | BMAD directory |
 | Status checks | BMAD directory |
 

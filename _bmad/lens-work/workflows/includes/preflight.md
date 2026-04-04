@@ -10,9 +10,9 @@
 
 ### 1. Check Release Branch
 
-Read the `bmad.lens.release` branch:
+Read the `lens.core` branch:
 ```bash
-git -C bmad.lens.release branch --show-current
+git -C lens.core branch --show-current
 ```
 
 ### 2. Determine Pull Strategy
@@ -27,7 +27,7 @@ Use branch-aware freshness windows:
 If full preflight is required, pull ALL authority repos:
 
 ```bash
-git -C bmad.lens.release pull origin
+git -C lens.core pull origin
 git -C {governance-repo-path} pull origin   # path from governance-setup.yaml
 ```
 
@@ -35,11 +35,11 @@ If full preflight is not required, skip pulls and run presence + `.github` sync 
 
 ### 3. Sync .github from Release Repo
 
-On every preflight run, verify `.github/` completeness against `bmad.lens.release/.github/` and sync if files are missing. Also sync if release `.github/` changed during pull.
+On every preflight run, verify `.github/` completeness against `lens.core/.github/` and sync if files are missing. Also sync if release `.github/` changed during pull.
 
 This check runs even when pull is skipped by timestamp.
 
-If `bmad.lens.release/.github/` is missing, stop with an error.
+If `lens.core/.github/` is missing, stop with an error.
 
 If `.github/` is missing, create it and copy from release.
 
@@ -51,25 +51,25 @@ After sync, keep prompt hygiene: `.github/prompts/` must only contain `lens-work
 
 **PowerShell:**
 ```powershell
-if (-not (Test-Path "bmad.lens.release/.github")) {
-        throw "Missing authority folder: bmad.lens.release/.github"
+if (-not (Test-Path "lens.core/.github")) {
+        throw "Missing authority folder: lens.core/.github"
 }
 
 if (-not (Test-Path ".github")) {
         New-Item -ItemType Directory -Path ".github" -Force | Out-Null
-        Copy-Item -Recurse -Force "bmad.lens.release/.github/*" ".github/"
+        Copy-Item -Recurse -Force "lens.core/.github/*" ".github/"
 }
 
-$missing = Get-ChildItem "bmad.lens.release/.github" -Recurse -File |
+$missing = Get-ChildItem "lens.core/.github" -Recurse -File |
         Where-Object {
-                $relative = $_.FullName.Substring((Resolve-Path "bmad.lens.release/.github").Path.Length).TrimStart('\\','/')
+                $relative = $_.FullName.Substring((Resolve-Path "lens.core/.github").Path.Length).TrimStart('\\','/')
                 -not (Test-Path (Join-Path ".github" $relative))
         }
 
-$changed = git -C bmad.lens.release diff --name-only HEAD@{1} HEAD -- .github/ 2>$null
+$changed = git -C lens.core diff --name-only HEAD@{1} HEAD -- .github/ 2>$null
 
 if ($missing.Count -gt 0 -or $changed) {
-        Copy-Item -Recurse -Force "bmad.lens.release/.github/*" ".github/"
+        Copy-Item -Recurse -Force "lens.core/.github/*" ".github/"
 }
 
 if (Test-Path ".github/prompts") {
@@ -81,21 +81,21 @@ if (Test-Path ".github/prompts") {
 
 **Bash:**
 ```bash
-if [ ! -d "bmad.lens.release/.github" ]; then
-    echo "ERROR: Missing authority folder bmad.lens.release/.github"
+if [ ! -d "lens.core/.github" ]; then
+    echo "ERROR: Missing authority folder lens.core/.github"
     exit 1
 fi
 
 if [ ! -d ".github" ]; then
     mkdir -p .github
-    cp -rf bmad.lens.release/.github/* .github/
+    cp -rf lens.core/.github/* .github/
 fi
 
-missing="$(cd bmad.lens.release && find .github -type f | while read -r f; do [ -f "../$f" ] || echo "$f"; done)"
-changed="$(git -C bmad.lens.release diff --name-only HEAD@{1} HEAD -- .github/ 2>/dev/null || true)"
+missing="$(cd lens.core && find .github -type f | while read -r f; do [ -f "../$f" ] || echo "$f"; done)"
+changed="$(git -C lens.core diff --name-only HEAD@{1} HEAD -- .github/ 2>/dev/null || true)"
 
 if [ -n "$missing" ] || [ -n "$changed" ]; then
-    cp -rf bmad.lens.release/.github/* .github/
+    cp -rf lens.core/.github/* .github/
 fi
 
 if [ -d ".github/prompts" ]; then
@@ -112,10 +112,10 @@ This check runs even when the pull is skipped by timestamp.
 **Bash:**
 ```bash
 for entry_point in CLAUDE.md; do
-    if [ -f "bmad.lens.release/$entry_point" ]; then
-        changed="$(git -C bmad.lens.release diff --name-only HEAD@{1} HEAD -- "$entry_point" 2>/dev/null || true)"
+    if [ -f "lens.core/$entry_point" ]; then
+        changed="$(git -C lens.core diff --name-only HEAD@{1} HEAD -- "$entry_point" 2>/dev/null || true)"
         if [ ! -f "./$entry_point" ] || [ -n "$changed" ]; then
-            cp "bmad.lens.release/$entry_point" "./$entry_point"
+            cp "lens.core/$entry_point" "./$entry_point"
         fi
     fi
 done
@@ -124,10 +124,10 @@ done
 **PowerShell:**
 ```powershell
 foreach ($entryPoint in @("CLAUDE.md")) {
-    $src = "bmad.lens.release/$entryPoint"
+    $src = "lens.core/$entryPoint"
     $dst = "./$entryPoint"
     if (Test-Path $src) {
-        $changed = git -C bmad.lens.release diff --name-only HEAD@{1} HEAD -- $entryPoint 2>$null
+        $changed = git -C lens.core diff --name-only HEAD@{1} HEAD -- $entryPoint 2>$null
         if (-not (Test-Path $dst) -or $changed) {
             Copy-Item -Force $src $dst
         }
@@ -149,7 +149,7 @@ This check runs even when pull is skipped by timestamp.
 ```bash
 if [ ! -d ".claude/commands" ]; then
     echo "[preflight] .claude/commands missing — running installer..."
-    bash bmad.lens.release/_bmad/lens-work/scripts/install.sh --ide claude
+    bash lens.core/_bmad/lens-work/scripts/install.sh --ide claude
 fi
 ```
 
@@ -157,7 +157,7 @@ fi
 ```powershell
 if (-not (Test-Path ".claude/commands")) {
     Write-Host "[preflight] .claude/commands missing — running installer..."
-    bash bmad.lens.release/_bmad/lens-work/scripts/install.sh --ide claude
+    bash lens.core/_bmad/lens-work/scripts/install.sh --ide claude
 }
 ```
 
@@ -203,12 +203,12 @@ After a successful full preflight, write the current UTC timestamp (ISO 8601 dat
 
 | Repo | Purpose |
 |------|---------|
-| `bmad.lens.release` | Release module with workflows, agents, prompts |
+| `lens.core` | Release module with workflows, agents, prompts |
 | `{governance-repo-path}` | Governance settings (from `_bmad-output/lens-work/governance-setup.yaml`) |
 
 ## Synced Content
 
 | Source | Destination | Content |
 |--------|-------------|---------|
-| `bmad.lens.release/.github/` | `.github/` | Copilot agents, prompts, instructions |
-| `bmad.lens.release/CLAUDE.md` | `./CLAUDE.md` | Claude Code agent entry point |
+| `lens.core/.github/` | `.github/` | Copilot agents, prompts, instructions |
+| `lens.core/CLAUDE.md` | `./CLAUDE.md` | Claude Code agent entry point |

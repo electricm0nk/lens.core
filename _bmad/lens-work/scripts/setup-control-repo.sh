@@ -4,7 +4,7 @@
 #
 # PURPOSE:
 #   Bootstraps a new control repo by cloning all required authority domains:
-#   - bmad.lens.release   → Release module (read-only dependency)
+#   - lens.core   → Release module (read-only dependency)
 #   - bmad.lens.copilot   → Copilot adapter (.github/ content)
 #   - lens-governance     → Governance repo (constitutional authority)
 #
@@ -20,7 +20,7 @@
 # OPTIONS:
 #   --org <name>               Default GitHub org/user for all repos (falls back if specific org not set)
 #   --release-org <name>       Release repo owner (default: uses --org)
-#   --release-repo <name>      Release repo name (default: bmad.lens.release)
+#   --release-repo <name>      Release repo name (default: lens.core)
 #   --release-branch <name>    Release repo branch (default: beta)
 #   --copilot-org <name>       Copilot repo owner (default: uses --org)
 #   --copilot-repo <name>      Copilot repo name (default: bmad.lens.copilot)
@@ -49,7 +49,7 @@ RESET='\033[0m'
 # -- Defaults ---------------------------------------------------------------
 ORG=""
 RELEASE_ORG=""
-RELEASE_REPO="bmad.lens.release"
+RELEASE_REPO="lens.core"
 RELEASE_BRANCH="beta"
 COPILOT_ORG=""
 COPILOT_REPO="bmad.lens.copilot"
@@ -197,7 +197,7 @@ ensure_gitignore_entries() {
   local entries=(
     "_bmad-output/lens-work/personal/"
     ".github/"
-    "bmad.lens.release/"
+    "lens.core/"
     "TargetProjects/"
   )
 
