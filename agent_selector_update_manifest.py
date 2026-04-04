@@ -79,17 +79,30 @@ if active_file.exists() and ci_file.exists():
 
         if new_persona and new_title:
             ci_content = ci_file.read_text(encoding="utf-8")
-
-            # Table row format: | agent_id | Persona | Title | Capabilities |
-            def replace_ci_row(m):
-                caps_col = f" {new_caps} " if new_caps else m.group(2)
-                return f"| {m.group(1)}| {new_persona} | {new_title} |{caps_col}|"
-
-            new_ci = re.sub(
-                r'\|\s*(' + re.escape(agent_id) + r'\s*)\|\s*[^|]*\|\s*[^|]*\|\s*([^|]*)\|',
-                replace_ci_row,
-                ci_content
-            )
-
+            lines = ci_content.splitlines(keepends=True)
+            
+            # Find and replace the row for this agent
+            new_lines = []
+            for line in lines:
+                # Match: | agent_id | ... | ... | ... |
+                if line.strip().startswith(f"| {agent_id} |") or line.strip().startswith(f"|{agent_id}|"):
+                    # Replace just the persona and title columns
+                    # Parse the row: split by |, keep agent_id, replace columns 2 and 3
+                    parts = [p.strip() for p in line.split("|")]
+                    # parts[0] is empty (before first |)
+                    # parts[1] is agent_id
+                    # parts[2] is old persona
+                    # parts[3] is old title
+                    # parts[4] is capabilities
+                    # parts[5] is empty (after last |)
+                    if len(parts) >= 5:
+                        new_line = f"| {parts[1]} | {new_persona} | {new_title} | {new_caps} |\n"
+                        new_lines.append(new_line)
+                    else:
+                        new_lines.append(line)
+                else:
+                    new_lines.append(line)
+            
+            new_ci = "".join(new_lines)
             if new_ci != ci_content:
                 ci_file.write_text(new_ci, encoding="utf-8")
