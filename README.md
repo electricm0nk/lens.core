@@ -27,7 +27,7 @@ LENS Workbench uses a git-derived lifecycle model:
 - Promotion happens audience-to-audience (`small → medium → large → base`)
 
 Main lifecycle contract:  
-`/home/runner/work/lens.core/lens.core/_bmad/lens-work/lifecycle.yaml`
+`_bmad/lens-work/lifecycle.yaml`
 
 ## Repository layout
 
@@ -83,7 +83,7 @@ Primary lifecycle/utility commands:
 - `/status`, `/next`, `/switch`, `/promote`, `/sense`, `/help`
 
 Command manifest:
-`/home/runner/work/lens.core/lens.core/_bmad/lens-work/module-help.csv`
+`_bmad/lens-work/module-help.csv`
 
 ## LENS phase flow
 
@@ -102,16 +102,16 @@ small --/promote--> medium --/promote--> large --/promote--> base
 This repo supports themed agent personas (for example `40k`, `dune`, `star_wars`, `tech_industry`).
 
 - Active assignment source of truth:  
-  `/home/runner/work/lens.core/lens.core/_bmad/custom_agents/agent_manifest.md`
+  `_bmad/custom_agents/agent_manifest.md`
 - Runtime copies are placed in:  
-  `/home/runner/work/lens.core/lens.core/_bmad/custom_agents/active/`
+  `_bmad/custom_agents/active/`
 
 Switch themes interactively:
 
 ```bash
-python /home/runner/work/lens.core/lens.core/agent_selector.py
+python ./agent_selector.py
 # or
-bash /home/runner/work/lens.core/lens.core/agent_selector.sh
+bash ./agent_selector.sh
 ```
 
 ## Scripts
