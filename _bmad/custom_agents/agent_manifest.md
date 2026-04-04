@@ -258,3 +258,145 @@ default_file: _bmad/lens-work/agents/lens.agent.md
 active_theme: "n/a"
 active_variant: lens.agent.md
 ```
+
+---
+
+## Available Theme Packages
+
+Theme files live in `_bmad/custom_agents/{theme}/`. Use `agent_selector.sh` to switch.
+
+### 40k (Warhammer 40,000)
+
+| Agent ID              | File                                    | Character               |
+|-----------------------|-----------------------------------------|-------------------------|
+| bmad-master           | bmad-master_malcador.md                 | Malcador the Sigillite  |
+| analyst               | analyst_greyfax.md                      | Inquisitor Greyfax      |
+| architect             | architect_perturabo.md                  | Perturabo               |
+| dev                   | dev_magos.md                            | Magos Dominus           |
+| pm                    | pm_creed.md                             | Ursarkar Creed          |
+| qa                    | qa_artemis.md                           | Artemis                 |
+| quick-flow-solo-dev   | quick-flow-solo-dev_eversor.md          | Eversor Assassin        |
+| sm                    | sm_grimaldus.md                         | Reclusiarch Grimaldus   |
+| tech-writer           | tech-writer_sindermann.md               | Sindermann              |
+| ux-designer           | ux-designer_navigator.md               | Navigator               |
+| brainstorming-coach   | brainstorming-coach_tigurius.md         | Tigurius                |
+| creative-problem-solver | creative-problem-solver_cawl.md       | Belisarius Cawl         |
+| design-thinking-coach | design-thinking-coach_eldrad.md         | Eldrad Ulthran          |
+| innovation-strategist | innovation-strategist_rogue-trader.md   | Rogue Trader            |
+| presentation-master   | presentation-master_solitaire.md        | Solitaire               |
+| storyteller           | storyteller_shadowseer.md               | Shadowseer              |
+
+---
+
+### bmad (BMAD Defaults)
+
+| Agent ID              | File                                    | Character               |
+|-----------------------|-----------------------------------------|-------------------------|
+| bmad-master           | bmad-master_bmad.md                     | BMad Master (default)   |
+| analyst               | analyst_bmad.md                         | Business Analyst        |
+| architect             | architect_bmad.md                       | Architect               |
+| dev                   | dev_bmad.md                             | Developer Agent         |
+| pm                    | pm_bmad.md                              | Product Manager         |
+| qa                    | qa_bmad.md                              | QA Engineer             |
+| quick-flow-solo-dev   | quick-flow-solo-dev_bmad.md             | Quick Flow Solo Dev     |
+| sm                    | sm_bmad.md                              | Scrum Master            |
+| tech-writer           | tech-writer_bmad.md                     | Technical Writer        |
+| ux-designer           | ux-designer_bmad.md                     | UX Designer             |
+| brainstorming-coach   | brainstorming-coach_bmad.md             | Brainstorming Coach     |
+| creative-problem-solver | creative-problem-solver_bmad.md       | Creative Problem Solver |
+| design-thinking-coach | design-thinking-coach_bmad.md           | Design Thinking Coach   |
+| innovation-strategist | innovation-strategist_bmad.md           | Innovation Strategist   |
+| presentation-master   | presentation-master_bmad.md             | Presentation Master     |
+| storyteller           | storyteller_bmad.md                     | Storyteller             |
+
+---
+
+### dune (Dune Universe)
+
+| Agent ID              | File                                    | Character               |
+|-----------------------|-----------------------------------------|-------------------------|
+| bmad-master           | bmad-master_leto-ii.md                  | Leto II, God Emperor    |
+| analyst               | analyst_mohiam.md                       | Gaius Helen Mohiam      |
+| architect             | architect_rhombur.md                    | Rhombur Vernius         |
+| dev                   | dev_hayt.md                             | Hayt (Duncan Idaho)     |
+| pm                    | pm_jessica.md                           | Lady Jessica            |
+| qa                    | qa_alia.md                              | Alia Atreides           |
+| quick-flow-solo-dev   | quick-flow-solo-dev_chani.md            | Chani                   |
+| sm                    | sm_stilgar.md                           | Stilgar                 |
+| tech-writer           | tech-writer_irulan.md                   | Princess Irulan         |
+| ux-designer           | ux-designer_margot-fenring.md           | Margot Fenring          |
+| brainstorming-coach   | brainstorming-coach_hawat.md            | Thufir Hawat            |
+| creative-problem-solver | creative-problem-solver_paul.md       | Paul Atreides           |
+| design-thinking-coach | design-thinking-coach_odrade.md         | Darwi Odrade            |
+| innovation-strategist | innovation-strategist_fenring.md        | Hasimir Fenring         |
+| presentation-master   | presentation-master_sheeana.md          | Sheeana Brugh           |
+| storyteller           | storyteller_irulan.md                   | Princess Irulan         |
+
+---
+
+### expanse (The Expanse)
+
+| Agent ID              | File                                    | Character               |
+|-----------------------|-----------------------------------------|-------------------------|
+| bmad-master           | bmad-master_fred-johnson.md             | Fred Johnson            |
+| analyst               | analyst_prax.md                         | Praxidike Meng          |
+| architect             | architect_naomi.md                      | Naomi Nagata            |
+| dev                   | dev_amos.md                             | Amos Burton             |
+| pm                    | pm_holden.md                            | James Holden            |
+| qa                    | qa_bobbie.md                            | Bobbie Draper           |
+| quick-flow-solo-dev   | quick-flow-solo-dev_drummer.md          | Camina Drummer          |
+| sm                    | sm_alex.md                              | Alex Kamal              |
+| tech-writer           | tech-writer_monica.md                   | Monica Stuart           |
+| ux-designer           | ux-designer_anna.md                     | Anna Volovodov          |
+| brainstorming-coach   | brainstorming-coach_miller.md           | Miller                  |
+| creative-problem-solver | creative-problem-solver_clarissa.md   | Clarissa Mao            |
+| design-thinking-coach | design-thinking-coach_elvi.md           | Elvi Okoye              |
+| innovation-strategist | innovation-strategist_marco.md          | Marco Inaros            |
+| presentation-master   | presentation-master_avasarala.md        | Chrisjen Avasarala      |
+| storyteller           | storyteller_ashford.md                  | Klaes Ashford           |
+
+---
+
+### star_wars (Star Wars)
+
+| Agent ID              | File                                    | Character               |
+|-----------------------|-----------------------------------------|-------------------------|
+| bmad-master           | bmad-master_yoda.md                     | Master Yoda             |
+| analyst               | analyst_cassian.md                      | Cassian Andor           |
+| architect             | architect_tarkin.md                     | Grand Moff Tarkin       |
+| dev                   | dev_k2so.md                             | K-2SO                   |
+| pm                    | pm_leia.md                              | Princess Leia           |
+| qa                    | qa_dedra-meero.md                       | Dedra Meero             |
+| quick-flow-solo-dev   | quick-flow-solo-dev_han-solo.md         | Han Solo                |
+| sm                    | sm_dodonna.md                           | General Dodonna         |
+| tech-writer           | tech-writer_c3po.md                     | C-3PO                   |
+| ux-designer           | ux-designer_lando.md                    | Lando Calrissian        |
+| brainstorming-coach   | brainstorming-coach_maz.md              | Maz Kanata              |
+| creative-problem-solver | creative-problem-solver_bodhi.md      | Bodhi Rook              |
+| design-thinking-coach | design-thinking-coach_chirrut.md        | Chirrut Îmwe            |
+| innovation-strategist | innovation-strategist_aphra.md          | Doctor Aphra            |
+| presentation-master   | presentation-master_palpatine.md        | Emperor Palpatine       |
+| storyteller           | storyteller_lor-san-tekka.md            | Lor San Tekka           |
+
+---
+
+### tech_industry (Tech Industry Pioneers)
+
+| Agent ID              | File                                    | Character               |
+|-----------------------|-----------------------------------------|-------------------------|
+| bmad-master           | bmad-master_ada-lovelace.md             | Ada Lovelace            |
+| analyst               | analyst_mary-meeker.md                  | Mary Meeker             |
+| architect             | architect_tim-berners-lee.md            | Tim Berners-Lee         |
+| dev                   | dev_linus.md                            | Linus Torvalds          |
+| pm                    | pm_tony-fadell.md                       | Tony Fadell             |
+| qa                    | qa_james-bach.md                        | James Bach              |
+| quick-flow-solo-dev   | quick-flow-solo-dev_wozniak.md          | Steve Wozniak (Woz)     |
+| sm                    | sm_sutherland.md                        | Jeff Sutherland         |
+| tech-writer           | tech-writer_knuth.md                    | Donald Knuth            |
+| ux-designer           | ux-designer_don-norman.md               | Don Norman              |
+| brainstorming-coach   | brainstorming-coach_osborn.md           | Alex Osborn             |
+| creative-problem-solver | creative-problem-solver_bret-victor.md | Bret Victor            |
+| design-thinking-coach | design-thinking-coach_tim-brown.md      | Tim Brown               |
+| innovation-strategist | innovation-strategist_christensen.md    | Clayton Christensen     |
+| presentation-master   | presentation-master_jobs.md             | Steve Jobs              |
+| storyteller           | storyteller_alan-kay.md                 | Alan Kay                |
