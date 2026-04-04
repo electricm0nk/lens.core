@@ -1,5 +1,5 @@
 ---
-description: 'Victor — Disruptive Innovation Oracle: agent capabilities'
+description: 'Rogue Trader — Disruptive Innovation Oracle: agent capabilities'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

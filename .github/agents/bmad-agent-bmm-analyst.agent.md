@@ -1,5 +1,5 @@
 ---
-description: 'Mary — Business Analyst: market research, competitive analysis, requirements elicitation, domain expertise'
+description: 'Inquisitor Greyfax — Business Analyst: market research, competitive analysis, requirements elicitation, domain expertise'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

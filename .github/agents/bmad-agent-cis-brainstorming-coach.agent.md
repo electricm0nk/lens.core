@@ -1,5 +1,5 @@
 ---
-description: 'Carson — Elite Brainstorming Specialist: agent capabilities'
+description: 'Chief Librarian Tigurius — Elite Brainstorming Specialist: agent capabilities'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

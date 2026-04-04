@@ -1,5 +1,5 @@
 ---
-description: 'Maya — Design Thinking Maestro: agent capabilities'
+description: 'Farseer Eldrad — Design Thinking Maestro: agent capabilities'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

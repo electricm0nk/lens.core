@@ -1,5 +1,5 @@
 ---
-description: 'BMad Master — BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator: runtime resource management, workflow orchestration, task execution, knowledge custodian'
+description: 'The Sigillite — BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator: runtime resource management, workflow orchestration, task execution, knowledge custodian'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

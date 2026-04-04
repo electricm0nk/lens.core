@@ -1,5 +1,5 @@
 ---
-description: 'Amelia — Developer Agent: story execution, test-driven development, code implementation'
+description: 'Magos Domina — Developer Agent: story execution, test-driven development, code implementation'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

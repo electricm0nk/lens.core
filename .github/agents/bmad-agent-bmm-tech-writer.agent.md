@@ -1,5 +1,5 @@
 ---
-description: 'Paige — Technical Writer: documentation, Mermaid diagrams, standards compliance, concept explanation'
+description: 'Iterator Sindermann — Technical Writer: documentation, Mermaid diagrams, standards compliance, concept explanation'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

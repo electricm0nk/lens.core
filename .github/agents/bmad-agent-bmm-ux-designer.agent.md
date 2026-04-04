@@ -1,5 +1,5 @@
 ---
-description: 'Sally — UX Designer: user research, interaction design, UI patterns, experience strategy'
+description: 'Navigator Prima — UX Designer: user research, interaction design, UI patterns, experience strategy'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 
