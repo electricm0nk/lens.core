@@ -124,5 +124,6 @@ LENS scripts (in `_bmad/lens-work/scripts/`) include:
 
 ## Notes
 
-- The top-level `.gitignore` intentionally treats `_bmad/custom_agents/active/` as tracked content with `skip-worktree` behavior controlled by the selector scripts (files are versioned, but local theme switches do not normally appear in `git status`).
+- The top-level `.gitignore` intentionally treats `_bmad/custom_agents/active/` as tracked content.
+- Selector scripts apply `skip-worktree` so files stay versioned, while local theme switches do not normally appear in `git status`.
 - `lens.core` is primarily a workflow/control repo rather than an application code runtime.
