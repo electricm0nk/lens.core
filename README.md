@@ -63,7 +63,7 @@ From repository root:
 Windows PowerShell:
 
 ```powershell
-powershell .\_bmad\lens-work\scripts\install.ps1
+powershell ./_bmad/lens-work/scripts/install.ps1
 ```
 
 Useful options:
