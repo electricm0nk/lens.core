@@ -391,6 +391,9 @@ mode_init() {
     git -C "${SCRIPT_DIR}" update-index --no-skip-worktree "_bmad/custom_agents/active/${agent_id}.md" 2>/dev/null || true
     cp "${src_abs}" "${ACTIVE_DIR}/${agent_id}.md"
     git -C "${SCRIPT_DIR}" update-index --skip-worktree "_bmad/custom_agents/active/${agent_id}.md" 2>/dev/null || true
+
+    # Update manifest, copilot-instructions.md, and .agent.md files
+    python3 "${UPDATE_MANIFEST_PY}" "${MANIFEST}" "${agent_id}" "${theme}" "${variant}"
     print_ok "${agent_id} → ${theme}/${variant}"
   done < <(list_agent_ids)
 

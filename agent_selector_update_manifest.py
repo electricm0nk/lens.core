@@ -62,7 +62,7 @@ repo_root     = manifest_file.parent.parent.parent.parent   # control repo (pare
 active_file   = manifest_file.parent / "active" / f"{agent_id}.md"
 ci_file       = repo_root / ".github" / "copilot-instructions.md"
 
-if active_file.exists() and ci_file.exists():
+if active_file.exists():
     agent_content = active_file.read_text(encoding="utf-8")
 
     # Parse name, title, capabilities from the <agent> XML opening tag
@@ -77,32 +77,76 @@ if active_file.exists() and ci_file.exists():
         new_title   = title_m.group(1) if title_m else None
         new_caps    = caps_m.group(1)  if caps_m  else None
 
-        if new_persona and new_title:
-            ci_content = ci_file.read_text(encoding="utf-8")
-            lines = ci_content.splitlines(keepends=True)
-            
-            # Find and replace the row for this agent
-            new_lines = []
-            for line in lines:
-                # Match: | agent_id | ... | ... | ... |
-                if line.strip().startswith(f"| {agent_id} |") or line.strip().startswith(f"|{agent_id}|"):
-                    # Replace just the persona and title columns
-                    # Parse the row: split by |, keep agent_id, replace columns 2 and 3
-                    parts = [p.strip() for p in line.split("|")]
-                    # parts[0] is empty (before first |)
-                    # parts[1] is agent_id
-                    # parts[2] is old persona
-                    # parts[3] is old title
-                    # parts[4] is capabilities
-                    # parts[5] is empty (after last |)
-                    if len(parts) >= 5:
-                        new_line = f"| {parts[1]} | {new_persona} | {new_title} | {new_caps} |\n"
-                        new_lines.append(new_line)
+        if new_persona and new_title and new_caps:
+            def update_available_agents_table(ci_path: Path) -> None:
+                if not ci_path.exists():
+                    return
+
+                ci_content = ci_path.read_text(encoding="utf-8")
+                lines = ci_content.splitlines(keepends=True)
+
+                # Find and replace the row for this agent
+                new_lines = []
+                for line in lines:
+                    # Match: | agent_id | ... | ... | ... |
+                    if line.strip().startswith(f"| {agent_id} |") or line.strip().startswith(f"|{agent_id}|"):
+                        parts = [p.strip() for p in line.split("|")]
+                        # parts[1] is agent_id, parts[2] persona, parts[3] title, parts[4] capabilities
+                        if len(parts) >= 5:
+                            new_line = f"| {parts[1]} | {new_persona} | {new_title} | {new_caps} |\n"
+                            new_lines.append(new_line)
+                        else:
+                            new_lines.append(line)
                     else:
                         new_lines.append(line)
-                else:
-                    new_lines.append(line)
-            
-            new_ci = "".join(new_lines)
-            if new_ci != ci_content:
-                ci_file.write_text(new_ci, encoding="utf-8")
+
+                new_ci = "".join(new_lines)
+                if new_ci != ci_content:
+                    ci_path.write_text(new_ci, encoding="utf-8")
+
+            # Keep both potential instruction files in sync:
+            # - control repo root
+            # - lens.core repo root
+            ci_candidates = [
+                repo_root / ".github" / "copilot-instructions.md",
+                manifest_file.parent.parent.parent / ".github" / "copilot-instructions.md",
+            ]
+            seen = set()
+            for ci_path in ci_candidates:
+                resolved = str(ci_path.resolve())
+                if resolved in seen:
+                    continue
+                seen.add(resolved)
+                update_available_agents_table(ci_path)
+
+            # ---------------------------------------------------------------
+            # Update .github/agents/*.agent.md description (VS Code reads
+            # agent personas from these files, not copilot-instructions.md)
+            # ---------------------------------------------------------------
+            new_desc = f"{new_persona} — {new_title}: {new_caps}"
+
+            # lens.core submodule root (parent of _bmad)
+            lens_core_root = manifest_file.parent.parent.parent
+
+            # Both locations that may contain .agent.md files
+            agent_dirs = [
+                repo_root / ".github" / "agents",
+                lens_core_root / ".github" / "agents",
+            ]
+
+            # Agent file naming: *-{agent_id}.agent.md
+            suffix = f"-{agent_id}.agent.md"
+
+            for agents_dir in agent_dirs:
+                if not agents_dir.is_dir():
+                    continue
+                for agent_file in agents_dir.iterdir():
+                    if agent_file.name.endswith(suffix):
+                        af_content = agent_file.read_text(encoding="utf-8")
+                        # Replace the description in YAML frontmatter
+                        af_content = re.sub(
+                            r"(?m)^(description:\s*)['\"]?.*?['\"]?\s*$",
+                            r"\g<1>'" + new_desc.replace("'", "''") + "'",
+                            af_content, count=1
+                        )
+                        agent_file.write_text(af_content, encoding="utf-8")
