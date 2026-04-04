@@ -352,7 +352,7 @@ params:
 # Uses step-file architecture with steps/ folder
 # Load steps one at a time (JIT) — NEVER load multiple step files simultaneously
 # ALWAYS halt at menus and wait for user input before proceeding
-agent_persona: "_bmad/bmm/agents/pm.md"
+agent_persona: "_bmad/custom_agents/active/pm.md"
 read_and_follow: "_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/workflow.md"
 params:
   architecture: "${docs_path}/architecture.md"
@@ -411,7 +411,7 @@ params:
 # RESOLVED: bmm.create-stories → Continue the epics-and-stories workflow:
 #   _bmad/bmm/workflows/3-solutioning/create-epics-and-stories/workflow.md
 # Story generation portion — continues from epic output
-agent_persona: "_bmad/bmm/agents/pm.md"
+agent_persona: "_bmad/custom_agents/active/pm.md"
 read_and_follow: "_bmad/bmm/workflows/3-solutioning/create-epics-and-stories/workflow.md"
 params:
   mode: "stories"

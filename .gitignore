@@ -1,0 +1,3 @@
+# active/ is committed (pre-populated with the default theme for zero-config clone experience).
+# The selector script sets git skip-worktree on these files so personal theme switches
+# don't dirty the working tree. Do not commit changes to active/.

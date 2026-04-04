@@ -1,210 +1,68 @@
 # Custom Agent Manifest
 
-This file is the source of truth for which agent variant files are currently active, and defines
-every pointer location that must be updated when switching an agent. It is consumed by the agent
-switch script located alongside this file.
+This file tracks which agent variant is currently active for each agent.
+It is consumed by `agent_selector.sh` and `agent_selector_update_manifest.py`.
+
+The `active/` directory (gitignored) is the runtime indirection layer —
+all committed IDE entrypoints load from `_bmad/custom_agents/active/{id}.md`.
 
 ---
 
 ## Script Contract
 
-The switch script reads each agent's YAML block and performs the following:
+The agent selector script:
+1. Reads `active_theme` and `active_variant` for each agent
+2. On switch: copies the chosen file into `_bmad/custom_agents/active/{id}.md`
+3. Updates `active_theme` and `active_variant` in this manifest
+4. Never touches any other committed file
 
-1. Reads `active_file` (the filename currently in use)
-2. Accepts a new variant filename as input
-3. For each entry in `pointer_files`, runs a string replacement:
-   `{prefix}{old_basename}` → `{prefix}{new_basename}` in `{path}`
-4. Updates `active_file` in this manifest to reflect the new active file
+`active_theme: default` means the agent loads from its canonical module path (no custom theme).
+The `init` command populates `active/` for all agents from current manifest state.
 
-Paths in `pointer_files` are relative to the **workspace root** (`/home/todd/Projects`).
-
-The `prefix` field is the exact path prefix as it appears in each pointer file — note that
-`agent-manifest.csv` uses `_bmad/` while `default-party.csv` omits the leading underscore.
+Paths are relative to `lens.core/`, i.e. the directory containing this file's `_bmad/` parent.
 
 ---
 
 ## Active Agents — Quick Reference
 
-| Agent ID              | Module     | Active File                                           |
-|-----------------------|------------|-------------------------------------------------------|
-| bmad-master           | core       | _bmad/core/agents/bmad-master.md                      |
-| analyst               | bmm        | _bmad/bmm/agents/analyst.md                           |
-| architect             | bmm        | _bmad/custom_agents/40k/architect_perturabo.md               |
-| dev                   | bmm        | _bmad/bmm/agents/dev.md                               |
-| pm                    | bmm        | _bmad/bmm/agents/pm.md                                |
-| qa                    | bmm        | _bmad/bmm/agents/qa.md                                |
-| quick-flow-solo-dev   | bmm        | _bmad/bmm/agents/quick-flow-solo-dev.md               |
-| sm                    | bmm        | _bmad/bmm/agents/sm.md                                |
-| tech-writer           | bmm        | _bmad/bmm/agents/tech-writer/tech-writer.md           |
-| ux-designer           | bmm        | _bmad/bmm/agents/ux-designer.md                       |
-| brainstorming-coach   | cis        | _bmad/cis/agents/brainstorming-coach.md               |
-| creative-problem-solver | cis      | _bmad/cis/agents/creative-problem-solver.md           |
-| design-thinking-coach | cis        | _bmad/cis/agents/design-thinking-coach.md             |
-| innovation-strategist | cis        | _bmad/cis/agents/innovation-strategist.md             |
-| presentation-master   | cis        | _bmad/cis/agents/presentation-master.md               |
-| storyteller           | cis        | _bmad/cis/agents/storyteller/storyteller.md           |
-| lens                  | lens-work  | _bmad/lens-work/agents/lens.agent.md                  |
+| Agent ID              | Module     | Active Theme | Active Variant                    |
+|-----------------------|------------|--------------|-----------------------------------|
+| bmad-master           | core       | 40k | bmad-master_malcador.md |
+| analyst               | bmm        | 40k | analyst_greyfax.md |
+| architect             | bmm        | 40k | architect_perturabo.md |
+| dev                   | bmm        | 40k | dev_magos.md |
+| pm                    | bmm        | 40k | pm_creed.md |
+| qa                    | bmm        | 40k | qa_artemis.md |
+| quick-flow-solo-dev   | bmm        | 40k | quick-flow-solo-dev_eversor.md |
+| sm                    | bmm        | 40k | sm_grimaldus.md |
+| tech-writer           | bmm        | 40k | tech-writer_sindermann.md |
+| ux-designer           | bmm        | 40k | ux-designer_navigator.md |
+| brainstorming-coach   | cis        | 40k | brainstorming-coach_tigurius.md |
+| creative-problem-solver | cis      | 40k | creative-problem-solver_cawl.md |
+| design-thinking-coach | cis        | 40k | design-thinking-coach_eldrad.md |
+| innovation-strategist | cis        | 40k | innovation-strategist_rogue-trader.md |
+| presentation-master   | cis        | 40k | presentation-master_solitaire.md |
+| storyteller           | cis        | 40k | storyteller_shadowseer.md |
+| lens                  | lens-work  | n/a          | lens.agent.md                     |
 
 ---
 
-## Agent Pointer Catalog
+## Agent Catalog
 
-Each agent block below is a parseable YAML definition. The `pointer_files` list is exhaustive —
-every location in the repository that contains a reference to this agent's file path.
+Each agent block defines its identity and source locations.
+`default_file` is the module-canonical path used when `active_theme: default`.
+Theme variants live in `_bmad/custom_agents/{theme}/{agent-id}_{character}.md`.
 
 ---
 
-### architect
+### bmad-master
 
 ```yaml
-id: architect
-module: bmm
-default_file: _bmad/bmm/agents/architect.md
-active_file: _bmad/custom_agents/40k/architect_perturabo.md
-pointer_files:
-  # IDE / AI activation entrypoints
-  - path: lens.core/.github/agents/bmad-agent-bmm-architect.agent.md
-    prefix: "{project-root}/_bmad/custom_agents/40k/"
-  - path: .github/agents/bmad-agent-bmm-architect.agent.md
-    prefix: "{project-root}/_bmad/custom_agents/40k/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-architect.md
-    prefix: "{project-root}/_bmad/custom_agents/40k/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-architect.md
-    prefix: "{project-root}/_bmad/custom_agents/40k/"
-  # Shared agent registry CSVs (updated for ALL agent switches)
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/custom_agents/40k/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/custom_agents/40k/"
-  # Workflow router references
-  - path: lens.core/_bmad/lens-work/workflows/router/businessplan/workflow.md
-    prefix: "_bmad/custom_agents/40k/"
-  - path: lens.core/_bmad/lens-work/workflows/router/techplan/workflow.md
-    prefix: "_bmad/custom_agents/40k/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/businessplan/workflow.md
-    prefix: "_bmad/custom_agents/40k/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/techplan/workflow.md
-    prefix: "_bmad/custom_agents/40k/"
-```
-
----
-
-### pm
-
-```yaml
-id: pm
-module: bmm
-default_file: _bmad/bmm/agents/pm.md
-active_file: _bmad/bmm/agents/pm.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-pm.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-pm.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-pm.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-pm.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
-  - path: lens.core/_bmad/lens-work/workflows/router/businessplan/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/lens-work/workflows/router/devproposal/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/businessplan/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/devproposal/workflow.md
-    prefix: "_bmad/bmm/agents/"
-```
-
----
-
-### ux-designer
-
-```yaml
-id: ux-designer
-module: bmm
-default_file: _bmad/bmm/agents/ux-designer.md
-active_file: _bmad/bmm/agents/ux-designer.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-ux-designer.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-ux-designer.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-ux-designer.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-ux-designer.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
-  - path: lens.core/_bmad/lens-work/workflows/router/businessplan/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/businessplan/workflow.md
-    prefix: "_bmad/bmm/agents/"
-```
-
----
-
-### sm
-
-```yaml
-id: sm
-module: bmm
-default_file: _bmad/bmm/agents/sm.md
-active_file: _bmad/bmm/agents/sm.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-sm.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-sm.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-sm.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-sm.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
-  - path: lens.core/_bmad/lens-work/workflows/router/sprintplan/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/lens-work/workflows/router/dev/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/sprintplan/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/dev/workflow.md
-    prefix: "_bmad/bmm/agents/"
-```
-
----
-
-### qa
-
-```yaml
-id: qa
-module: bmm
-default_file: _bmad/bmm/agents/qa.md
-active_file: _bmad/bmm/agents/qa.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-qa.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-qa.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-qa.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-qa.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
-  - path: lens.core/_bmad/lens-work/workflows/router/dev/workflow.md
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/custom/lens-work/lens-work/workflows/router/dev/workflow.md
-    prefix: "_bmad/bmm/agents/"
+id: bmad-master
+module: core
+default_file: _bmad/core/agents/bmad-master.md
+active_theme: 40k
+active_variant: bmad-master_malcador.md
 ```
 
 ---
@@ -215,20 +73,20 @@ pointer_files:
 id: analyst
 module: bmm
 default_file: _bmad/bmm/agents/analyst.md
-active_file: _bmad/bmm/agents/analyst.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-analyst.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-analyst.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-analyst.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-analyst.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
+active_theme: 40k
+active_variant: analyst_greyfax.md
+```
+
+---
+
+### architect
+
+```yaml
+id: architect
+module: bmm
+default_file: _bmad/bmm/agents/architect.md
+active_theme: 40k
+active_variant: architect_perturabo.md
 ```
 
 ---
@@ -239,20 +97,32 @@ pointer_files:
 id: dev
 module: bmm
 default_file: _bmad/bmm/agents/dev.md
-active_file: _bmad/bmm/agents/dev.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-dev.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-dev.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-dev.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-dev.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
+active_theme: 40k
+active_variant: dev_magos.md
+```
+
+---
+
+### pm
+
+```yaml
+id: pm
+module: bmm
+default_file: _bmad/bmm/agents/pm.md
+active_theme: 40k
+active_variant: pm_creed.md
+```
+
+---
+
+### qa
+
+```yaml
+id: qa
+module: bmm
+default_file: _bmad/bmm/agents/qa.md
+active_theme: 40k
+active_variant: qa_artemis.md
 ```
 
 ---
@@ -263,20 +133,20 @@ pointer_files:
 id: quick-flow-solo-dev
 module: bmm
 default_file: _bmad/bmm/agents/quick-flow-solo-dev.md
-active_file: _bmad/bmm/agents/quick-flow-solo-dev.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-quick-flow-solo-dev.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: .github/agents/bmad-agent-bmm-quick-flow-solo-dev.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-quick-flow-solo-dev.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-quick-flow-solo-dev.md
-    prefix: "{project-root}/_bmad/bmm/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/"
+active_theme: 40k
+active_variant: quick-flow-solo-dev_eversor.md
+```
+
+---
+
+### sm
+
+```yaml
+id: sm
+module: bmm
+default_file: _bmad/bmm/agents/sm.md
+active_theme: 40k
+active_variant: sm_grimaldus.md
 ```
 
 ---
@@ -287,42 +157,20 @@ pointer_files:
 id: tech-writer
 module: bmm
 default_file: _bmad/bmm/agents/tech-writer/tech-writer.md
-active_file: _bmad/bmm/agents/tech-writer/tech-writer.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmm-tech-writer.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/tech-writer/"
-  - path: .github/agents/bmad-agent-bmm-tech-writer.agent.md
-    prefix: "{project-root}/_bmad/bmm/agents/tech-writer/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmm-tech-writer.md
-    prefix: "{project-root}/_bmad/bmm/agents/tech-writer/"
-  - path: lens.core/.claude/commands/bmad-agent-bmm-tech-writer.md
-    prefix: "{project-root}/_bmad/bmm/agents/tech-writer/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/bmm/agents/tech-writer/"
-  - path: lens.core/_bmad/bmm/teams/default-party.csv
-    prefix: "bmad/bmm/agents/tech-writer/"
+active_theme: 40k
+active_variant: tech-writer_sindermann.md
 ```
 
 ---
 
-### bmad-master
+### ux-designer
 
 ```yaml
-id: bmad-master
-module: core
-default_file: _bmad/core/agents/bmad-master.md
-active_file: _bmad/core/agents/bmad-master.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-bmad-master.agent.md
-    prefix: "{project-root}/_bmad/core/agents/"
-  - path: .github/agents/bmad-agent-bmad-master.agent.md
-    prefix: "{project-root}/_bmad/core/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-bmad-master.md
-    prefix: "{project-root}/_bmad/core/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-bmad-master.md
-    prefix: "{project-root}/_bmad/core/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/core/agents/"
+id: ux-designer
+module: bmm
+default_file: _bmad/bmm/agents/ux-designer.md
+active_theme: 40k
+active_variant: ux-designer_navigator.md
 ```
 
 ---
@@ -333,20 +181,8 @@ pointer_files:
 id: brainstorming-coach
 module: cis
 default_file: _bmad/cis/agents/brainstorming-coach.md
-active_file: _bmad/cis/agents/brainstorming-coach.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-cis-brainstorming-coach.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: .github/agents/bmad-agent-cis-brainstorming-coach.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-cis-brainstorming-coach.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-cis-brainstorming-coach.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/cis/agents/"
-  - path: lens.core/_bmad/cis/teams/default-party.csv
-    prefix: "bmad/cis/agents/"
+active_theme: 40k
+active_variant: brainstorming-coach_tigurius.md
 ```
 
 ---
@@ -357,20 +193,8 @@ pointer_files:
 id: creative-problem-solver
 module: cis
 default_file: _bmad/cis/agents/creative-problem-solver.md
-active_file: _bmad/cis/agents/creative-problem-solver.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-cis-creative-problem-solver.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: .github/agents/bmad-agent-cis-creative-problem-solver.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-cis-creative-problem-solver.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-cis-creative-problem-solver.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/cis/agents/"
-  - path: lens.core/_bmad/cis/teams/default-party.csv
-    prefix: "bmad/cis/agents/"
+active_theme: 40k
+active_variant: creative-problem-solver_cawl.md
 ```
 
 ---
@@ -381,20 +205,8 @@ pointer_files:
 id: design-thinking-coach
 module: cis
 default_file: _bmad/cis/agents/design-thinking-coach.md
-active_file: _bmad/cis/agents/design-thinking-coach.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-cis-design-thinking-coach.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: .github/agents/bmad-agent-cis-design-thinking-coach.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-cis-design-thinking-coach.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-cis-design-thinking-coach.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/cis/agents/"
-  - path: lens.core/_bmad/cis/teams/default-party.csv
-    prefix: "bmad/cis/agents/"
+active_theme: 40k
+active_variant: design-thinking-coach_eldrad.md
 ```
 
 ---
@@ -405,20 +217,8 @@ pointer_files:
 id: innovation-strategist
 module: cis
 default_file: _bmad/cis/agents/innovation-strategist.md
-active_file: _bmad/cis/agents/innovation-strategist.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-cis-innovation-strategist.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: .github/agents/bmad-agent-cis-innovation-strategist.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-cis-innovation-strategist.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-cis-innovation-strategist.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/cis/agents/"
-  - path: lens.core/_bmad/cis/teams/default-party.csv
-    prefix: "bmad/cis/agents/"
+active_theme: 40k
+active_variant: innovation-strategist_rogue-trader.md
 ```
 
 ---
@@ -429,20 +229,8 @@ pointer_files:
 id: presentation-master
 module: cis
 default_file: _bmad/cis/agents/presentation-master.md
-active_file: _bmad/cis/agents/presentation-master.md
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-cis-presentation-master.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: .github/agents/bmad-agent-cis-presentation-master.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-cis-presentation-master.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-cis-presentation-master.md
-    prefix: "{project-root}/_bmad/cis/agents/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/cis/agents/"
-  - path: lens.core/_bmad/cis/teams/default-party.csv
-    prefix: "bmad/cis/agents/"
+active_theme: 40k
+active_variant: presentation-master_solitaire.md
 ```
 
 ---
@@ -453,25 +241,8 @@ pointer_files:
 id: storyteller
 module: cis
 default_file: _bmad/cis/agents/storyteller/storyteller.md
-active_file: _bmad/cis/agents/storyteller/storyteller.md
-# NOTE: cis/teams/default-party.csv has an inconsistency — it references
-# "bmad/cis/agents/storyteller.md" (no subdirectory) while all activation files
-# use "_bmad/cis/agents/storyteller/storyteller.md". The CSV uses a flat path;
-# the script must handle this entry with a different prefix than the others.
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-cis-storyteller.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/storyteller/"
-  - path: .github/agents/bmad-agent-cis-storyteller.agent.md
-    prefix: "{project-root}/_bmad/cis/agents/storyteller/"
-  - path: lens.core/.cursor/commands/bmad-agent-cis-storyteller.md
-    prefix: "{project-root}/_bmad/cis/agents/storyteller/"
-  - path: lens.core/.claude/commands/bmad-agent-cis-storyteller.md
-    prefix: "{project-root}/_bmad/cis/agents/storyteller/"
-  - path: lens.core/_bmad/_config/agent-manifest.csv
-    prefix: "_bmad/cis/agents/storyteller/"
-  - path: lens.core/_bmad/cis/teams/default-party.csv
-    prefix: "bmad/cis/agents/"
-    note: "CSV uses flat path 'storyteller.md' not 'storyteller/storyteller.md' — verify before switching"
+active_theme: 40k
+active_variant: storyteller_shadowseer.md
 ```
 
 ---
@@ -481,51 +252,9 @@ pointer_files:
 ```yaml
 id: lens
 module: lens-work
-# The lens agent loads multiple files on activation — not a single agent file.
-# Switching variants requires updating all four load targets below.
+# The lens agent is not theme-able — it loads directly from the module.
+# active/ indirection does not apply to this agent.
 default_file: _bmad/lens-work/agents/lens.agent.md
-active_file: _bmad/lens-work/agents/lens.agent.md
-activation_files:
-  - lens.core/_bmad/lens-work/module.yaml
-  - lens.core/_bmad/lens-work/agents/lens.agent.md
-  - lens.core/_bmad/lens-work/lifecycle.yaml
-  - lens.core/_bmad/lens-work/module-help.csv
-pointer_files:
-  - path: lens.core/.github/agents/bmad-agent-lens-work-lens.agent.md
-    prefix: "lens.core/_bmad/lens-work/agents/"
-  - path: .github/agents/bmad-agent-lens-work-lens.agent.md
-    prefix: "lens.core/_bmad/lens-work/agents/"
-  - path: lens.core/.cursor/commands/bmad-agent-lens-work-lens.md
-    prefix: "lens.core/_bmad/lens-work/agents/"
-  - path: lens.core/.claude/commands/bmad-agent-lens-work-lens.md
-    prefix: "lens.core/_bmad/lens-work/agents/"
+active_theme: "n/a"
+active_variant: lens.agent.md
 ```
-
----
-
-## Available Variants
-
-### Theme: 40k (Warhammer 40,000)
-
-| Agent ID                | Variant File                                                 | Character                     | Status    |
-|-------------------------|--------------------------------------------------------------|-------------------------------|-----------|
-| architect               | custom_agents/40k/architect_perturabo.md                     | Perturabo, Iron Primarch       | active    |
-| analyst                 | custom_agents/40k/analyst_greyfax.md                         | Inquisitor Greyfax             | available |
-| bmad-master             | custom_agents/40k/bmad-master_malcador.md                    | The Sigillite (Malcador)       | available |
-| brainstorming-coach     | custom_agents/40k/brainstorming-coach_tigurius.md            | Chief Librarian Tigurius       | available |
-| creative-problem-solver | custom_agents/40k/creative-problem-solver_cawl.md            | Archmagos Cawl                 | available |
-| design-thinking-coach   | custom_agents/40k/design-thinking-coach_eldrad.md            | Farseer Eldrad Ulthran         | available |
-| dev                     | custom_agents/40k/dev_magos.md                               | Magos Domina                   | available |
-| innovation-strategist   | custom_agents/40k/innovation-strategist_rogue-trader.md      | Rogue Trader                   | available |
-| pm                      | custom_agents/40k/pm_creed.md                                | Lord Commander Creed           | available |
-| presentation-master     | custom_agents/40k/presentation-master_solitaire.md           | The Solitaire                  | available |
-| qa                      | custom_agents/40k/qa_artemis.md                              | Watch-Captain Artemis          | available |
-| quick-flow-solo-dev     | custom_agents/40k/quick-flow-solo-dev_eversor.md             | Eversor Assassin               | available |
-| sm                      | custom_agents/40k/sm_grimaldus.md                            | High Chaplain Grimaldus        | available |
-| storyteller             | custom_agents/40k/storyteller_shadowseer.md                  | The Shadowseer                 | available |
-| tech-writer             | custom_agents/40k/tech-writer_sindermann.md                  | Iterator Sindermann            | available |
-| ux-designer             | custom_agents/40k/ux-designer_navigator.md                   | Navigator Prima                | available |
-
-> Set `status` to `available` for inactive variants, `active` for the one currently in use.
-> To switch an agent, update `active_file` in the agent's YAML block above and update the
-> Quick Reference table, then run the switch script to propagate the new path to all pointer files.

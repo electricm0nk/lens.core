@@ -316,7 +316,7 @@ params:
 # Agent persona: Bob (Scrum Master) — _bmad/bmm/agents/sm.md
 # Engine executes steps sequentially — save outputs after EACH step
 # STOP and wait for user at decision points
-agent_persona: "_bmad/bmm/agents/sm.md"
+agent_persona: "_bmad/custom_agents/active/sm.md"
 load_engine: "_bmad/core/tasks/workflow.yaml"
 execute_workflow: "_bmad/bmm/workflows/4-implementation/sprint-planning/workflow.yaml"
 params:

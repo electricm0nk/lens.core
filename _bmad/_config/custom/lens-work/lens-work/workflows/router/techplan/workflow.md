@@ -251,7 +251,7 @@ Each sub-workflow uses sequential step-file architecture.
 - 💾 Save/update frontmatter after completing each step before loading the next
 - 🎯 Read the ENTIRE step file before taking any action within it
 
-**Agent:** Adopt Perturabo (Lord of Iron) persona — load `_bmad/custom_agents/40k/architect_perturabo.md`
+**Agent:** Adopt Perturabo (Lord of Iron) persona — load `_bmad/custom_agents/active/architect.md`
 
 ```yaml
 # Load context from previous phases
@@ -274,12 +274,12 @@ output: |
 
 # RESOLVED: workflow-step architecture-design → Read fully and follow:
 #   _bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md
-# Agent persona: Perturabo (Lord of Iron) — _bmad/custom_agents/40k/architect_perturabo.md
+# Agent persona: Perturabo (Lord of Iron) — _bmad/custom_agents/active/architect.md
 # Context: pass existing architecture.md as baseline for refinement
 # Uses step-file architecture with steps/ folder — load steps one at a time
 # NEVER load multiple step files simultaneously
 # ALWAYS halt at menus and wait for user input before proceeding
-agent_persona: "_bmad/custom_agents/40k/architect_perturabo.md"
+agent_persona: "_bmad/custom_agents/active/architect.md"
 read_and_follow: "_bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md"
 params:
   context: { product_brief, prd, epics }
