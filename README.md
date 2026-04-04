@@ -5,7 +5,7 @@ It provides the lifecycle router, workflow definitions, agent instructions, and 
 
 ## What this repository contains
 
-- **LENS Workbench module** in `_bmad/lens-work/` (v2 lifecycle routing + git orchestration)
+- **LENS Workbench module** in `_bmad/lens-work/` (module version 2.0.0 with git-derived lifecycle routing and orchestration)
 - **BMAD modules** (`core`, `bmm`, `cis`, `tea`, `gds`, `bmb`)
 - **IDE command/agent adapters** for:
   - GitHub Copilot (`.github/`)
@@ -24,7 +24,7 @@ LENS Workbench uses a git-derived lifecycle model:
 - Git branches + PR metadata + committed artifacts define state
 - PRs are the lifecycle gates
 - Planning phases are routed to specific agents
-- Promotion happens audience-to-audience (`small → medium → large → base`)
+- Promotion happens between audience branches (review scopes): `small → medium → large → base`
 
 Main lifecycle contract:  
 `_bmad/lens-work/lifecycle.yaml`
@@ -47,7 +47,8 @@ lens.core/
 ├── .codex/                 # Codex command stubs
 ├── agent_selector.py       # Cross-platform interactive theme switcher
 ├── agent_selector.sh       # Bash theme switcher
-└── AGENTS.md / CLAUDE.md   # Runtime loading instructions for IDE agents
+├── AGENTS.md               # Runtime loading instructions (Codex)
+└── CLAUDE.md               # Runtime loading instructions (Claude Code)
 ```
 
 ## Quick start
