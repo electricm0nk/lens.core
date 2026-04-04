@@ -279,7 +279,9 @@ output: |
 # Uses step-file architecture with steps/ folder — load steps one at a time
 # NEVER load multiple step files simultaneously
 # ALWAYS halt at menus and wait for user input before proceeding
-agent_persona: "_bmad/custom_agents/active/architect.md"
+# 🚨 BLOCKING: Read and fully adopt the agent persona before any output
+read_and_adopt: "_bmad/custom_agents/active/architect.md"
+# DO NOT proceed until persona file is loaded and activation steps are complete
 read_and_follow: "_bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md"
 params:
   context: { product_brief, prd, epics }

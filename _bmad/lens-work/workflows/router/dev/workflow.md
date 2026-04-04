@@ -818,7 +818,9 @@ params:
 #   1. Load engine: _bmad/core/tasks/workflow.yaml
 #   2. Pass config: _bmad/bmm/workflows/4-implementation/code-review/workflow.yaml
 # Agent persona: Quinn (QA) — load and adopt _bmad/bmm/agents/qa.md
-agent_persona: "_bmad/custom_agents/active/qa.md"
+# 🚨 BLOCKING: Read and fully adopt the agent persona before any output
+read_and_adopt: "_bmad/custom_agents/active/qa.md"
+# DO NOT proceed until persona file is loaded and activation steps are complete
 load_engine: "_bmad/core/tasks/workflow.yaml"
 execute_workflow: "_bmad/bmm/workflows/4-implementation/code-review/workflow.yaml"
 params:
@@ -1118,7 +1120,9 @@ if yes:
   #   1. Load engine: _bmad/core/tasks/workflow.yaml
   #   2. Pass config: _bmad/bmm/workflows/4-implementation/retrospective/workflow.yaml
   # Agent persona: Switch to Bob (Scrum Master) — load and adopt _bmad/bmm/agents/sm.md
-  agent_persona: "_bmad/custom_agents/active/sm.md"
+  # 🚨 BLOCKING: Read and fully adopt the agent persona before any output
+  read_and_adopt: "_bmad/custom_agents/active/sm.md"
+  # DO NOT proceed until persona file is loaded and activation steps are complete
   load_engine: "_bmad/core/tasks/workflow.yaml"
   execute_workflow: "_bmad/bmm/workflows/4-implementation/retrospective/workflow.yaml"
   params:
