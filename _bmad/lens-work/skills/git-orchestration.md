@@ -101,25 +101,62 @@ git push origin "${CURRENT_BRANCH}"
 
 ### `delete-branch`
 
-Delete a phase branch after its PR has been merged.
+Delete a phase or audience branch after its PR has been merged.
 
 **Algorithm:**
 ```bash
-# 1. VERIFY PR is merged before allowing deletion
-provider-adapter query-pr-status \
-  --head "${PHASE_BRANCH}" \
-  --base "${AUDIENCE_BRANCH}" \
-  --state merged
-
-# 2. Only if merged PR found:
-git branch -d "${PHASE_BRANCH}"          # Delete local
-git push origin --delete "${PHASE_BRANCH}"  # Delete remote
+# 1. VERIFY the merge was confirmed (passed in from the auto-merge-pr return value)
+# 2. Only if merge confirmed:
+git branch -d "${BRANCH}"              # Delete local
+git push origin --delete "${BRANCH}"   # Delete remote
 ```
 
 **Safety rules:**
-- **NEVER** delete a branch without verifying its PR is merged
-- Verify PR merge status via provider adapter before any deletion
+- **NEVER** delete a branch without a confirmed merge return value from `auto-merge-pr`
+- Never re-query PR status speculatively — rely on the merge confirmation passed from the calling workflow
 - Log deletion in commit message of the target branch
+
+---
+
+### `auto-merge-pr`
+
+Merge a PR immediately via GitHub REST API after creation. This is the standard merge path — no manual review is expected.
+
+**Input:**
+```yaml
+pr_number: {number}       # PR number from create-pr response
+repo_owner: {org}         # GitHub org/owner
+repo_name: {repo}         # Repository name
+merge_method: merge       # merge | squash | rebase (default: merge)
+```
+
+**Algorithm:**
+```bash
+# Use GitHub REST API — no gh CLI required
+PUT /repos/{owner}/{repo}/pulls/{pr_number}/merge
+Authorization: token {PAT}
+Content-Type: application/json
+Body: { "merge_method": "merge", "commit_title": "{PR title}" }
+```
+
+**PAT source:** Same priority order as `promote-branch.sh` — `GITHUB_PAT` env var → `GH_ENTERPRISE_TOKEN` → `GH_TOKEN` → `profile.yaml`
+
+**Output:**
+```yaml
+merged: true
+sha: {merge_commit_sha}
+message: "Pull Request successfully merged"
+```
+
+**Error handling:**
+| HTTP | Meaning | Action |
+|------|---------|--------|
+| 200 | Merged | Proceed to branch cleanup |
+| 405 | Not mergeable yet | Report error — do not delete branches |
+| 409 | Merge conflict | Report error — user must resolve before retrying |
+| 422 | PR already merged / closed | Treat as success if closed=merged |
+
+**NEVER** attempt branch deletion on any non-200 result.
 
 ---
 
