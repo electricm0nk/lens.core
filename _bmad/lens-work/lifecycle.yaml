@@ -45,10 +45,18 @@ fundamental_truths:
 # -----------------------------------------------------------------------------
 design_axioms:
   A1: "Git is the only source of truth for shared workflow state. No git-ignored runtime state."
-  A2: "PRs are the only gating mechanism. No side-channel approval."
+  A2: "PRs are the only gating mechanism. No side-channel approval. Gate checks run at PR creation; PRs are auto-merged when all checks pass."
   A3: "Authority domains must be explicit. Every file belongs to exactly one authority."
   A4: "Sensing must be automatic at lifecycle gates, not manual discovery."
   A5: "The control repo is an operational workspace, not a code repo."
+
+# -----------------------------------------------------------------------------
+# PR AND BRANCH BEHAVIOR
+# -----------------------------------------------------------------------------
+pr_behavior:
+  auto_merge: true          # PRs are merged immediately after creation when all gate checks pass
+  branch_cleanup: eager     # Phase and audience branches are deleted immediately after their PR merges
+  final_merge_target: main  # After base promotion, initiative root is merged to this branch and all initiative branches are deleted
 
 # -----------------------------------------------------------------------------
 # LENS HIERARCHY
@@ -83,6 +91,7 @@ audiences:
     description: "Constitution-gated — dev execution happens outside this planning lifecycle"
     phases: []
     entry_gate: constitution-gate
+    final_merge_to: main    # After landing in base, merge base→main then delete all initiative branches
 
 # -----------------------------------------------------------------------------
 # PHASES

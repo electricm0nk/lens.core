@@ -107,19 +107,26 @@ source_branch: "{initiative-root}-{audience}-{phase}"
 target_branch: "{initiative-root}-{audience}"
 ```
 
+### Auto-Merge
+
+Immediately after the PR is created, merge it via GitHub REST API (do not wait for manual review):
+
+1. Use `git-orchestration` skill → `auto-merge-pr` with the PR number returned from `create-pr`
+2. Wait for merge confirmation
+3. On merge success: proceed to Branch Cleanup
+4. On merge failure: report error and stop
+
 ### Response
 
 ```
-✅ Phase PR created
+✅ Phase complete: {display_name}
 
-## PR Details
-- **Title:** [PHASE] {initiative-root} — {display_name} complete
-- **URL:** {pr_url}
-- **Artifacts included:** {count} files
-- **Review required:** Yes — merge to complete this phase
+- PR: [PHASE] {initiative-root} — {display_name} complete
+- Merged automatically
+- Artifacts: {count} files
+- Phase branch cleaned up
 
-## Next Step
-Merge the PR, then run `/{next_phase}` to continue.
+Next: run `/{next_phase}` to continue.
 ```
 
 ### Step: Check Promotion Readiness After Phase Completion
@@ -142,30 +149,25 @@ After the phase PR is created, automatically check if promotion to the next audi
 
 ## Phase Branch Cleanup
 
-After a phase PR is merged, the phase branch should be cleaned up.
-
-### Detection
-
-Branch cleanup is triggered lazily when `/next` or `/status` detects a merged phase PR with an existing phase branch.
+Phase branch cleanup is **eager** — it happens immediately after the phase PR is confirmed merged, not lazily.
 
 ### Algorithm
 
-1. Check if PR from `{root}-{audience}-{phase}` → `{root}-{audience}` is merged (via provider-adapter `query-pr`)
-2. If merged AND phase branch still exists:
+1. Confirm the merge return value from `auto-merge-pr` (do not re-query)
+2. Immediately delete the phase branch using `git-orchestration` skill → `delete-branch`:
    ```bash
-   git branch -d {root}-{audience}-{phase}        # Delete local
-   git push origin --delete {root}-{audience}-{phase}  # Delete remote
+   git branch -d {root}-{audience}-{phase}              # Delete local
+   git push origin --delete {root}-{audience}-{phase}   # Delete remote
    ```
 3. Report cleanup:
    ```
-   🧹 Cleaned up merged phase branch `{root}-{audience}-{phase}`
+   🧹 Phase branch `{root}-{audience}-{phase}` deleted
    ```
 
 ### Safety
 
-- **ALWAYS** verify PR is merged before deletion (via provider-adapter)
-- Phase completion state is preserved in PR metadata — branch deletion doesn't lose state
-- git-state derives phase completion from PR metadata, NOT branch existence
+- **ONLY** delete on confirmed merge return from `auto-merge-pr` — never on unconfirmed state
+- git-state derives phase completion from PR metadata — branch deletion does not lose state
 
 ## Error Handling
 

@@ -10,7 +10,9 @@
 
 Promote an initiative from the current audience tier to the next audience in the chain (small → medium → large → base) with comprehensive pre-promotion gate checks.
 
-**Design Axiom A2:** Phase work and promotion are strictly separate operations. Promotion is NEVER automatic — always requires a reviewed and merged PR.
+All gate checks run before the promotion PR is created. Once gate checks pass, the PR is created and **immediately auto-merged** — no manual review step. After the merge, the source audience branch and all its phase children are deleted eagerly.
+
+When promoting to `base` (the final audience), a further PR is automatically created from `{root}-base` → `main`, auto-merged, and all initiative branches are deleted.
 
 ## Prerequisites
 
@@ -101,7 +103,7 @@ Use provider adapter to create PR:
 
 - **From:** `{root}-{current-audience}`
 - **To:** `{root}-{next-audience}`
-- **Title:** `[PROMOTE] {initiative} {current}→{next} — Adversarial Review Gate`
+- **Title:** `[PROMOTE] {initiative} {current}→{next}`
 - **Body:** Assembled from sections below
 
 ### Step 6: Assemble PR Body
@@ -130,47 +132,78 @@ Include the following sections in the promotion PR body:
 ## Artifacts Summary
 
 {list of committed artifacts by phase}
-
-## Review Requirements
-
-{gate requirements from lifecycle.yaml for the target audience}
-- {entry_gate description}
-- This PR requires review before merge
 ```
 
-### Step 7: Report to User
+### Step 7: Auto-Merge Promotion PR
+
+Immediately after the PR is created, merge it via GitHub REST API (do not wait for manual review):
+
+1. Use `git-orchestration` skill → `auto-merge-pr` with the PR number returned from `create-pr`
+2. Wait for merge confirmation
+3. On merge success: proceed to Step 8 (Audience Branch Cleanup)
+4. On merge failure: report error and stop — do not delete branches
+
+### Step 8: Audience Branch Cleanup
+
+After the promotion PR is confirmed merged, immediately clean up the source audience branch and all its phase children. **Do not use GitHub Actions for this cleanup — use the git-orchestration skill directly.**
+
+```bash
+# Delete all phase branches that were children of {root}-{current-audience}
+# Pattern: {root}-{current-audience}-*
+for each phase_branch matching {root}-{current-audience}-*:
+    git branch -d {phase_branch}
+    git push origin --delete {phase_branch}
+
+# Delete the source audience branch
+git branch -d {root}-{current-audience}
+git push origin --delete {root}-{current-audience}
+```
+
+Use `git-orchestration` skill → `delete-branch` for each deletion. Report each deletion:
+```
+🧹 Cleaned up `{branch}`
+```
+
+### Step 9: Handle base Promotion — Final Merge to main
+
+If `{next-audience}` is `base` (i.e., this was the `large → base` promotion):
+
+1. Read `final_merge_target` from `lifecycle.yaml` `pr_behavior` (default: `main`)
+2. Create a final PR:
+   - **From:** `{root}-base`
+   - **To:** `{final_merge_target}` (e.g., `main`)
+   - **Title:** `[INITIATIVE COMPLETE] {initiative} — planning artifacts`
+   - **Body:** Summary of the full initiative lifecycle and artifact index
+3. Auto-merge this final PR via `git-orchestration` skill → `auto-merge-pr`
+4. After merge confirmed, delete all remaining initiative branches:
+   ```bash
+   git branch -d {root}-base && git push origin --delete {root}-base
+   git branch -d {root} && git push origin --delete {root}
+   ```
+5. Report initiative complete:
+   ```
+   🎉 Initiative complete: {initiative}
+
+   Planning artifacts are now on `{final_merge_target}`.
+   All initiative branches have been cleaned up.
+
+   Next: run /dev to begin implementation in target projects.
+   ```
+
+### Step 10: Report Promotion Chain Status
 
 ```
-✅ Promotion PR created: {pr_url}
+✅ Promoted: {initiative} {current}→{next}
 
-[PROMOTE] {initiative} {current}→{next} — Adversarial Review Gate
+Branches cleaned up: {list of deleted branches}
 
-The PR requires review and merge to complete promotion.
-Sensing: {overlap_count} overlapping initiative(s) detected — see PR body.
-```
-
-### Step 8: Check for Further Promotions
-
-After the promotion PR is created and the user is ready to proceed, inform them of potential chain promotions:
-
-```
 **Promotion Chain:**
+- ✅ small → medium: complete
+- ✅ medium → large: complete    (example — show actual state)
+- ⏳ large → base: Requires sprintplan
 
-Current:  small  → **PROMOTED TO →** medium
-Next Available: medium → large (when devproposal is complete)
-
-**To continue the promotion chain after this PR merges:**
-1. Merge the current promotion PR
-2. Run /devproposal to complete the medium audience phase
-3. After devproposal completes, /promote will offer promotion to large
-
-**Chain Status:**
-- ✅ small → medium: In Progress (merge when gate checks pass)
-- ⏳ medium → large: Requires devproposal + merge
-- ⏳ large → base: Requires sprintplan + merge
+Continue with: /{next_phase} on the {next-audience} audience branch.
 ```
-
-This provides visibility into the full promotion lifecycle and helps users understand what comes next.
 
 ---
 
@@ -186,8 +219,9 @@ This provides visibility into the full promotion lifecycle and helps users under
 
 ## Key Constraints
 
-- Promotion is NEVER automatic — always a reviewed PR
+- Gate checks must ALL pass before the promotion PR is created
 - Promotion PRs are merge PRs (not rebase or squash)
 - Gate checks are cumulative — higher audiences have stricter gates
 - Sensing report is always included, even when no overlaps found
 - Constitution can upgrade any check from informational to hard gate
+- Branch cleanup is always performed immediately after merge — never via GitHub Actions
