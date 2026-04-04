@@ -353,6 +353,10 @@ def mode_init() -> None:
         _git_update_index("--skip-worktree", rel)
         print_ok(f"{agent_id} \u2192 {theme}/{variant}")
 
+    # Hide local manifest changes from git status (active_theme/active_variant drift)
+    _git_update_index("--skip-worktree", "_bmad/custom_agents/agent_manifest.md")
+    print_ok("agent_manifest.md marked skip-worktree")
+
     print()
     print_header("active/ initialized. You're ready to go.")
 
