@@ -91,10 +91,10 @@ Command manifest:
 preplan → businessplan → techplan → devproposal → sprintplan
 ```
 
-Audience gates:
+Audience gates (using `/promote` between audience branches):
 
 ```text
-small --/promote--> medium --/promote--> large --/promote--> base
+small → medium → large → base
 ```
 
 ## Agent themes and variants
@@ -124,5 +124,5 @@ LENS scripts (in `_bmad/lens-work/scripts/`) include:
 
 ## Notes
 
-- The top-level `.gitignore` intentionally treats `_bmad/custom_agents/active/` as tracked content with `skip-worktree` behavior controlled by the selector scripts.
+- The top-level `.gitignore` intentionally treats `_bmad/custom_agents/active/` as tracked content with `skip-worktree` behavior controlled by the selector scripts (files are versioned, but local theme switches do not normally appear in `git status`).
 - `lens.core` is primarily a workflow/control repo rather than an application code runtime.
