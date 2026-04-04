@@ -318,7 +318,7 @@ Theme files live in `_bmad/custom_agents/{theme}/`. Use `agent_selector.sh` to s
 | bmad-master           | bmad-master_leto-ii.md                  | Leto II, God Emperor    |
 | analyst               | analyst_mohiam.md                       | Gaius Helen Mohiam      |
 | architect             | architect_rhombur.md                    | Rhombur Vernius         |
-| dev                   | dev_hayt.md                             | Hayt (Duncan Idaho)     |
+| dev                   | dev_duncan-idaho.md                     | Duncan Idaho            |
 | pm                    | pm_jessica.md                           | Lady Jessica            |
 | qa                    | qa_alia.md                              | Alia Atreides           |
 | quick-flow-solo-dev   | quick-flow-solo-dev_chani.md            | Chani                   |
