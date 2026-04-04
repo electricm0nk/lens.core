@@ -54,10 +54,11 @@ with open(manifest_path, 'w') as f:
 
 # ---------------------------------------------------------------------------
 # Update Available Agents table in .github/copilot-instructions.md
-# Derive repo root from manifest path: _bmad/custom_agents/agent_manifest.md
+# Derive control repo root: manifest is in lens.core/_bmad/custom_agents/,
+# so we go: manifest -> custom_agents -> _bmad -> lens.core -> control repo
 # ---------------------------------------------------------------------------
 manifest_file = Path(manifest_path).resolve()
-repo_root     = manifest_file.parent.parent.parent   # _bmad/custom_agents -> _bmad -> root
+repo_root     = manifest_file.parent.parent.parent.parent   # control repo (parent of lens.core)
 active_file   = manifest_file.parent / "active" / f"{agent_id}.md"
 ci_file       = repo_root / ".github" / "copilot-instructions.md"
 
