@@ -63,7 +63,7 @@ From repository root:
 Windows PowerShell:
 
 ```powershell
-powershell ./_bmad/lens-work/scripts/install.ps1
+./_bmad/lens-work/scripts/install.ps1
 ```
 
 Useful options:
@@ -99,7 +99,7 @@ small --/promote--> medium --/promote--> large --/promote--> base
 
 ## Agent themes and variants
 
-This repo supports themed agent personas (for example `40k`, `dune`, `star_wars`, `tech_industry`).
+This repo supports themed agent personas, including `40k`, `dune`, `expanse`, `star_wars`, and `tech_industry`.
 
 - Active assignment source of truth:  
   `_bmad/custom_agents/agent_manifest.md`
