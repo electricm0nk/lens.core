@@ -1,5 +1,5 @@
 ---
-description: 'Bob — Scrum Master: sprint planning, story preparation, agile ceremonies, backlog management'
+description: 'High Chaplain Grimaldus — Scrum Master: sprint planning, story preparation, agile ceremonies, backlog management'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

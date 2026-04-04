@@ -1,5 +1,5 @@
 ---
-description: 'Sophia — Master Storyteller: agent capabilities'
+description: 'The Shadowseer — Master Storyteller: agent capabilities'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

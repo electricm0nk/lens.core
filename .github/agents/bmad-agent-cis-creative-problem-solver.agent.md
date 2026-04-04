@@ -1,5 +1,5 @@
 ---
-description: 'Dr. Quinn — Master Problem Solver: agent capabilities'
+description: 'Archmagos Cawl — Master Problem Solver: agent capabilities'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

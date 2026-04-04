@@ -1,5 +1,5 @@
 ---
-description: 'Caravaggio — Visual Communication + Presentation Expert: agent capabilities'
+description: 'The Solitaire — Visual Communication + Presentation Expert: agent capabilities'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

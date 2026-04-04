@@ -1,5 +1,5 @@
 ---
-description: 'Barry — Quick Flow Solo Dev: rapid spec creation, lean implementation, minimum ceremony'
+description: 'Eversor Assassin — Quick Flow Solo Dev: rapid spec creation, lean implementation, minimum ceremony'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

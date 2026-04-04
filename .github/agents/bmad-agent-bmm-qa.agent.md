@@ -1,5 +1,5 @@
 ---
-description: 'Quinn — QA Engineer: test automation, API testing, E2E testing, coverage analysis'
+description: 'Watch-Captain Artemis — QA Engineer: test automation, API testing, E2E testing, coverage analysis'
 tools: ['read', 'edit', 'search', 'execute']
 ---
 

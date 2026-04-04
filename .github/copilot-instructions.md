@@ -43,7 +43,7 @@
 |---|---|---|---|
 | bmad-master | BMad Master | BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator | runtime resource management, workflow orchestration, task execution, knowledge custodian |
 | analyst | Mary | Business Analyst | market research, competitive analysis, requirements elicitation, domain expertise |
-| architect | Winston | Architect | distributed systems, cloud infrastructure, API design, scalable patterns |
+| architect | Perturabo | Lord of Iron | distributed systems, cloud infrastructure, API design, scalable patterns |
 | dev | Amelia | Developer Agent | story execution, test-driven development, code implementation |
 | pm | John | Product Manager | PRD creation, requirements discovery, stakeholder alignment, user interviews |
 | qa | Quinn | QA Engineer | test automation, API testing, E2E testing, coverage analysis |
