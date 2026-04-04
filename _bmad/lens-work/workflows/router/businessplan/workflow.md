@@ -363,11 +363,11 @@ params:
 
 # RESOLVED: bmm.create-architecture → Read fully and follow this workflow file:
 #   _bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md
-# Agent persona: Switch to Winston (Architect) — load and adopt _bmad/bmm/agents/architect.md
+# Agent persona: Switch to Perturabo (Lord of Iron) — load and adopt _bmad/custom_agents/40k/architect_perturabo.md
 # Uses step-file architecture with steps/ folder
 # Load steps one at a time (JIT) — NEVER load multiple step files simultaneously
 # ALWAYS halt at menus and wait for user input before proceeding
-agent_persona: "_bmad/bmm/agents/architect.md"
+agent_persona: "_bmad/custom_agents/40k/architect_perturabo.md"
 read_and_follow: "_bmad/bmm/workflows/3-solutioning/create-architecture/workflow.md"
 params:
   prd: "${docs_path}/prd.md"
