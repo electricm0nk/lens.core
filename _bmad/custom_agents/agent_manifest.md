@@ -507,9 +507,25 @@ pointer_files:
 
 ### Theme: 40k (Warhammer 40,000)
 
-| Agent ID  | Variant File                                  | Status  |
-|-----------|-----------------------------------------------|---------|
-| architect | custom_agents/40k/architect_perturabo.md      | active  |
+| Agent ID                | Variant File                                                 | Character                     | Status    |
+|-------------------------|--------------------------------------------------------------|-------------------------------|-----------|
+| architect               | custom_agents/40k/architect_perturabo.md                     | Perturabo, Iron Primarch       | active    |
+| analyst                 | custom_agents/40k/analyst_greyfax.md                         | Inquisitor Greyfax             | available |
+| bmad-master             | custom_agents/40k/bmad-master_malcador.md                    | The Sigillite (Malcador)       | available |
+| brainstorming-coach     | custom_agents/40k/brainstorming-coach_tigurius.md            | Chief Librarian Tigurius       | available |
+| creative-problem-solver | custom_agents/40k/creative-problem-solver_cawl.md            | Archmagos Cawl                 | available |
+| design-thinking-coach   | custom_agents/40k/design-thinking-coach_eldrad.md            | Farseer Eldrad Ulthran         | available |
+| dev                     | custom_agents/40k/dev_magos.md                               | Magos Domina                   | available |
+| innovation-strategist   | custom_agents/40k/innovation-strategist_rogue-trader.md      | Rogue Trader                   | available |
+| pm                      | custom_agents/40k/pm_creed.md                                | Lord Commander Creed           | available |
+| presentation-master     | custom_agents/40k/presentation-master_solitaire.md           | The Solitaire                  | available |
+| qa                      | custom_agents/40k/qa_artemis.md                              | Watch-Captain Artemis          | available |
+| quick-flow-solo-dev     | custom_agents/40k/quick-flow-solo-dev_eversor.md             | Eversor Assassin               | available |
+| sm                      | custom_agents/40k/sm_grimaldus.md                            | High Chaplain Grimaldus        | available |
+| storyteller             | custom_agents/40k/storyteller_shadowseer.md                  | The Shadowseer                 | available |
+| tech-writer             | custom_agents/40k/tech-writer_sindermann.md                  | Iterator Sindermann            | available |
+| ux-designer             | custom_agents/40k/ux-designer_navigator.md                   | Navigator Prima                | available |
 
-> Additional 40k variants can be added alongside this file and registered in the table above.
 > Set `status` to `available` for inactive variants, `active` for the one currently in use.
+> To switch an agent, update `active_file` in the agent's YAML block above and update the
+> Quick Reference table, then run the switch script to propagate the new path to all pointer files.
