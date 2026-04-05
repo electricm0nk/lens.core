@@ -155,8 +155,31 @@ if active_file.exists():
                         agent_file.write_text(af_content, encoding="utf-8")
 
             # ---------------------------------------------------------------
-            # Update displayName in CSV manifests (workflows read these)
+            # Update CSV manifests from active agent file (skip-worktree)
+            # Parse full persona from XML elements in the active file so
+            # the CSVs stay in sync with whatever theme is active locally.
             # ---------------------------------------------------------------
+            def parse_xml_element(text: str, tag: str) -> str | None:
+                """Extract text content from <tag>...</tag> (may be multiline)."""
+                m = re.search(
+                    rf"<{re.escape(tag)}>(.*?)</{re.escape(tag)}>",
+                    text, re.DOTALL,
+                )
+                return " ".join(m.group(1).split()) if m else None
+
+            persona_fields = {
+                "displayName": new_persona,
+                "title":       new_title,
+                "icon":        re.search(r'icon="([^"]*)"', tag_attrs).group(1)
+                               if re.search(r'icon="([^"]*)"', tag_attrs) else None,
+                "capabilities": new_caps,
+                "role":        parse_xml_element(agent_content, "role"),
+                "identity":    parse_xml_element(agent_content, "identity"),
+                "communicationStyle":
+                               parse_xml_element(agent_content, "communication_style"),
+                "principles":  parse_xml_element(agent_content, "principles"),
+            }
+
             bmad_root = manifest_file.parent.parent  # lens.core/_bmad/
 
             csv_files = [
@@ -175,9 +198,12 @@ if active_file.exists():
 
                 changed = False
                 for row in rows:
-                    if row["name"] == agent_id and row["displayName"] != new_persona:
-                        row["displayName"] = new_persona
-                        changed = True
+                    if row["name"] != agent_id:
+                        continue
+                    for key, val in persona_fields.items():
+                        if val is not None and key in row and row[key] != val:
+                            row[key] = val
+                            changed = True
 
                 if changed:
                     with open(csv_path, "w", newline="", encoding="utf-8") as cf:
