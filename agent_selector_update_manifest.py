@@ -5,8 +5,11 @@ Usage: python3 agent_selector_update_manifest.py <manifest_path> <agent_id> <new
 
 Updates `active_theme` and `active_variant` fields for the specified agent,
 the corresponding row in the Active Agents quick-reference table,
-and the Available Agents table in .github/copilot-instructions.md (persona/title/capabilities).
+the Available Agents table in .github/copilot-instructions.md (persona/title/capabilities),
+the displayName column in agent-manifest.csv and team default-party.csv files,
+and the description field in .github/agents/*.agent.md files.
 """
+import csv
 import sys
 import re
 from pathlib import Path
@@ -150,3 +153,34 @@ if active_file.exists():
                             af_content, count=1
                         )
                         agent_file.write_text(af_content, encoding="utf-8")
+
+            # ---------------------------------------------------------------
+            # Update displayName in CSV manifests (workflows read these)
+            # ---------------------------------------------------------------
+            bmad_root = manifest_file.parent.parent  # lens.core/_bmad/
+
+            csv_files = [
+                bmad_root / "_config" / "agent-manifest.csv",
+                bmad_root / "bmm" / "teams" / "default-party.csv",
+                bmad_root / "cis" / "teams" / "default-party.csv",
+            ]
+
+            for csv_path in csv_files:
+                if not csv_path.exists():
+                    continue
+                with open(csv_path, "r", newline="", encoding="utf-8") as cf:
+                    reader = csv.DictReader(cf)
+                    fieldnames = reader.fieldnames
+                    rows = list(reader)
+
+                changed = False
+                for row in rows:
+                    if row["name"] == agent_id and row["displayName"] != new_persona:
+                        row["displayName"] = new_persona
+                        changed = True
+
+                if changed:
+                    with open(csv_path, "w", newline="", encoding="utf-8") as cf:
+                        writer = csv.DictWriter(cf, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+                        writer.writeheader()
+                        writer.writerows(rows)
