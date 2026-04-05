@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
 description: 'Bootstrap control repo — detect provider, validate auth, create profile, auto-clone TargetProjects'
 ---

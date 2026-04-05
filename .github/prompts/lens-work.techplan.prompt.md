@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
 description: 'Start TechPlan phase — architecture document, technical decisions (Winston/Architect)'
 ---

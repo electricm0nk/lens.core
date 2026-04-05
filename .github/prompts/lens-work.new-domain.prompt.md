@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
 description: 'Create new domain-level initiative with domain-only branch and folder scaffolding'
 ---

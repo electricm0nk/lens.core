@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
 description: 'Start BusinessPlan phase — PRD creation, UX design (John/PM + Sally/UX, small audience)'
 ---
