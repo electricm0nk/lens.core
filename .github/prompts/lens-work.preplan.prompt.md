@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 description: 'Start PrePlan phase — brainstorm, research, product brief (Mary/Analyst, small audience)'
 ---
 

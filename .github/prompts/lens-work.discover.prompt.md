@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
 description: 'Discover repos under TargetProjects and update governance inventory'
 ---

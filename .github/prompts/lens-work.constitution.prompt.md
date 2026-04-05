@@ -1,4 +1,5 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
 description: 'Resolve and display constitutional governance'
 ---
