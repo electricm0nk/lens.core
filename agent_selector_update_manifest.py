@@ -155,9 +155,10 @@ if active_file.exists():
                         agent_file.write_text(af_content, encoding="utf-8")
 
             # ---------------------------------------------------------------
-            # Update CSV manifests from active agent file (skip-worktree)
+            # Update active/agent-manifest.csv (centralized per-user state)
             # Parse full persona from XML elements in the active file so
-            # the CSVs stay in sync with whatever theme is active locally.
+            # the CSV stays in sync with whatever theme is active locally.
+            # All per-user state lives under custom_agents/active/.
             # ---------------------------------------------------------------
             def parse_xml_element(text: str, tag: str) -> str | None:
                 """Extract text content from <tag>...</tag> (may be multiline)."""
@@ -180,18 +181,10 @@ if active_file.exists():
                 "principles":  parse_xml_element(agent_content, "principles"),
             }
 
-            bmad_root = manifest_file.parent.parent  # lens.core/_bmad/
+            active_csv = manifest_file.parent / "active" / "agent-manifest.csv"
 
-            csv_files = [
-                bmad_root / "_config" / "agent-manifest.csv",
-                bmad_root / "bmm" / "teams" / "default-party.csv",
-                bmad_root / "cis" / "teams" / "default-party.csv",
-            ]
-
-            for csv_path in csv_files:
-                if not csv_path.exists():
-                    continue
-                with open(csv_path, "r", newline="", encoding="utf-8") as cf:
+            if active_csv.exists():
+                with open(active_csv, "r", newline="", encoding="utf-8") as cf:
                     reader = csv.DictReader(cf)
                     fieldnames = reader.fieldnames
                     rows = list(reader)
@@ -206,7 +199,7 @@ if active_file.exists():
                             changed = True
 
                 if changed:
-                    with open(csv_path, "w", newline="", encoding="utf-8") as cf:
+                    with open(active_csv, "w", newline="", encoding="utf-8") as cf:
                         writer = csv.DictWriter(cf, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
                         writer.writeheader()
                         writer.writerows(rows)
