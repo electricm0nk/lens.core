@@ -58,7 +58,7 @@ Load config from `{project-root}/_bmad/gds/bmadconfig.yaml` and resolve:
 
 ### Required Inputs
 
-- `agent_manifest` = `{project-root}/_bmad/_config/agent-manifest.csv`
+- `agent_manifest` = `{project-root}/_bmad/custom_agents/active/agent-manifest.csv`
 
 ### Context
 
