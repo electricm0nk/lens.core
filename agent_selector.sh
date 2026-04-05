@@ -401,6 +401,16 @@ mode_init() {
   git -C "${SCRIPT_DIR}" update-index --skip-worktree "_bmad/custom_agents/agent_manifest.md" 2>/dev/null || true
   print_ok "agent_manifest.md marked skip-worktree"
 
+  # Hide CSV manifests from git status (persona data varies by active theme)
+  local csv_file
+  for csv_file in \
+    "_bmad/_config/agent-manifest.csv" \
+    "_bmad/bmm/teams/default-party.csv" \
+    "_bmad/cis/teams/default-party.csv"; do
+    git -C "${SCRIPT_DIR}" update-index --skip-worktree "${csv_file}" 2>/dev/null || true
+  done
+  print_ok "CSV manifests marked skip-worktree"
+
   echo ""
   print_header "active/ initialized. You're ready to go."
 }
