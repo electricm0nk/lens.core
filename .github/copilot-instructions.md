@@ -41,16 +41,16 @@
 
 | Agent | Persona | Title | Capabilities |
 |---|---|---|---|
-| bmad-master | BMad Master | BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator | runtime resource management, workflow orchestration, task execution, knowledge custodian |
-| analyst | Mary | Business Analyst | market research, competitive analysis, requirements elicitation, domain expertise |
+| bmad-master | The Sigillite | BMad Master Executor, Knowledge Custodian, and Workflow Orchestrator | runtime resource management, workflow orchestration, task execution, knowledge custodian |
+| analyst | Inquisitor Greyfax | Business Analyst | market research, competitive analysis, requirements elicitation, domain expertise |
 | architect | Perturabo | Lord of Iron | distributed systems, cloud infrastructure, API design, scalable patterns |
-| dev | Amelia | Developer Agent | story execution, test-driven development, code implementation |
-| pm | John | Product Manager | PRD creation, requirements discovery, stakeholder alignment, user interviews |
-| qa | Quinn | QA Engineer | test automation, API testing, E2E testing, coverage analysis |
-| quick-flow-solo-dev | Barry | Quick Flow Solo Dev | rapid spec creation, lean implementation, minimum ceremony |
-| sm | Bob | Scrum Master | sprint planning, story preparation, agile ceremonies, backlog management |
-| tech-writer | Paige | Technical Writer | documentation, Mermaid diagrams, standards compliance, concept explanation |
-| ux-designer | Sally | UX Designer | user research, interaction design, UI patterns, experience strategy |
+| dev | Magos Domina | Developer Agent | story execution, test-driven development, code implementation |
+| pm | Lord Commander Creed | Product Manager | PRD creation, requirements discovery, stakeholder alignment, user interviews |
+| qa | Watch-Captain Artemis | QA Engineer | test automation, API testing, E2E testing, coverage analysis |
+| quick-flow-solo-dev | Eversor Assassin | Quick Flow Solo Dev | rapid spec creation, lean implementation, minimum ceremony |
+| sm | High Chaplain Grimaldus | Scrum Master | sprint planning, story preparation, agile ceremonies, backlog management |
+| tech-writer | Iterator Sindermann | Technical Writer | documentation, Mermaid diagrams, standards compliance, concept explanation |
+| ux-designer | Navigator Prima | UX Designer | user research, interaction design, UI patterns, experience strategy |
 
 ## Slash Commands
 

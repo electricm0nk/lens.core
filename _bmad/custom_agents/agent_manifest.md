@@ -27,22 +27,22 @@ Paths are relative to `lens.core/`, i.e. the directory containing this file's `_
 
 | Agent ID              | Module     | Active Theme | Active Variant                    |
 |-----------------------|------------|--------------|-----------------------------------|
-| bmad-master           | core       | 40k | bmad-master_malcador.md |
-| analyst               | bmm        | 40k | analyst_greyfax.md |
-| architect             | bmm        | 40k | architect_perturabo.md |
-| dev                   | bmm        | 40k | dev_magos.md |
-| pm                    | bmm        | 40k | pm_creed.md |
-| qa                    | bmm        | 40k | qa_artemis.md |
-| quick-flow-solo-dev   | bmm        | 40k | quick-flow-solo-dev_eversor.md |
-| sm                    | bmm        | 40k | sm_grimaldus.md |
-| tech-writer           | bmm        | 40k | tech-writer_sindermann.md |
-| ux-designer           | bmm        | 40k | ux-designer_navigator.md |
-| brainstorming-coach   | cis        | 40k | brainstorming-coach_tigurius.md |
-| creative-problem-solver | cis      | 40k | creative-problem-solver_cawl.md |
-| design-thinking-coach | cis        | 40k | design-thinking-coach_eldrad.md |
-| innovation-strategist | cis        | 40k | innovation-strategist_rogue-trader.md |
-| presentation-master   | cis        | 40k | presentation-master_solitaire.md |
-| storyteller           | cis        | 40k | storyteller_shadowseer.md |
+| bmad-master           | core       | 40k  | bmad-master_malcador.md |
+| analyst               | bmm        | 40k  | analyst_greyfax.md |
+| architect             | bmm        | 40k  | architect_perturabo.md |
+| dev                   | bmm        | 40k  | dev_magos.md |
+| pm                    | bmm        | 40k  | pm_creed.md |
+| qa                    | bmm        | 40k  | qa_artemis.md |
+| quick-flow-solo-dev   | bmm        | 40k  | quick-flow-solo-dev_eversor.md |
+| sm                    | bmm        | 40k  | sm_grimaldus.md |
+| tech-writer           | bmm        | 40k  | tech-writer_sindermann.md |
+| ux-designer           | bmm        | 40k  | ux-designer_navigator.md |
+| brainstorming-coach   | cis        | 40k  | brainstorming-coach_tigurius.md |
+| creative-problem-solver | cis      | 40k  | creative-problem-solver_cawl.md |
+| design-thinking-coach | cis        | 40k  | design-thinking-coach_eldrad.md |
+| innovation-strategist | cis        | 40k  | innovation-strategist_rogue-trader.md |
+| presentation-master   | cis        | 40k  | presentation-master_solitaire.md |
+| storyteller           | cis        | 40k  | storyteller_shadowseer.md |
 | lens                  | lens-work  | n/a          | lens.agent.md                     |
 
 ---
