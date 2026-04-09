@@ -81,7 +81,7 @@ docs_path = initiative.docs.path
 repo_docs_path = "docs/${initiative.docs.domain}/${initiative.docs.service}/${initiative.docs.repo}"
 
 if docs_path == null or docs_path == "":
-  docs_path = "_bmad-output/planning-artifacts/"
+  docs_path = "docs/planning-artifacts/"
   repo_docs_path = null
   warning: "⚠️ DEPRECATED: Initiative missing docs.path configuration."
 
