@@ -82,7 +82,7 @@ docs_path = initiative.docs.path
 repo_docs_path = "docs/${initiative.docs.domain}/${initiative.docs.service}/${initiative.docs.repo}"
 
 if docs_path == null or docs_path == "":
-  docs_path = "_bmad-output/planning-artifacts/"
+  docs_path = "docs/planning-artifacts/"
   repo_docs_path = null
   warning: "⚠️ DEPRECATED: Initiative missing docs.path configuration."
   warning: "  → Run: /lens migrate <initiative-id> to add docs.path"
@@ -579,8 +579,8 @@ params:
 | Artifact | Location |
 |----------|----------|
 | Epics | `${docs_path}/epics.md` |
-| Epic Party-Mode Review | `_bmad-output/planning-artifacts/epic-*-party-mode-review.md` |
-| Implementation Readiness Adversarial Report | `_bmad-output/planning-artifacts/implementation-readiness-report-*.md` |
+| Epic Party-Mode Review | `docs/planning-artifacts/epic-*-party-mode-review.md` |
+| Implementation Readiness Adversarial Report | `docs/planning-artifacts/implementation-readiness-report-*.md` |
 | Stories | `${docs_path}/stories.md` |
 | Readiness | `${docs_path}/readiness-checklist.md` |
 | Initiative State | `_bmad-output/lens-work/initiatives/${id}.yaml` |
