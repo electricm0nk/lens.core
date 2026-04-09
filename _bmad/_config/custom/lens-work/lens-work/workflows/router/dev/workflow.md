@@ -80,13 +80,13 @@ docs_path = initiative.docs.path
 repo_docs_path = "docs/${initiative.docs.domain}/${initiative.docs.service}/${initiative.docs.repo}"
 
 if docs_path == null or docs_path == "":
-  docs_path = "_bmad-output/planning-artifacts/"
+  docs_path = "docs/planning-artifacts/"
   repo_docs_path = null
   warning: "⚠️ DEPRECATED: Initiative missing docs.path configuration."
   warning: "  → Run: /lens migrate <initiative-id> to add docs.path"
 
 # NOTE: docs_path is READ-ONLY in /dev — used for context loading (S11)
-# Dev outputs go to _bmad-output/implementation-artifacts/ (unchanged)
+# Dev outputs go to docs/implementation-artifacts/
 
 # REQ-10: Resolve BmadDocs path for per-initiative output co-location
 bmad_docs = initiative.docs.bmad_docs
@@ -137,7 +137,7 @@ if session.target_path contains "lens.core":
     Expected target_path pattern: TargetProjects/{domain}/{service}/{repo-name}
 
 # === Context Loader (S11: Context Enhancement) ===
-if docs_path != "_bmad-output/planning-artifacts/":
+if docs_path != "docs/planning-artifacts/":
   architecture = load_if_exists("${docs_path}/architecture.md")
   stories = load_if_exists("${docs_path}/stories.md")
   planning_context = { architecture: architecture, stories: stories }
@@ -324,8 +324,8 @@ if bmad_docs != null:
   story_files += glob("${bmad_docs}/dev-story-${epic_number}-*.md")
   story_files += glob("${bmad_docs}/*epic-${epic_number}*.md")
 
-story_files += glob("_bmad-output/implementation-artifacts/dev-story-${epic_number}-*.md")
-story_files += glob("_bmad-output/implementation-artifacts/*epic-${epic_number}*.md")
+story_files += glob("docs/implementation-artifacts/dev-story-${epic_number}-*.md")
+story_files += glob("docs/implementation-artifacts/*epic-${epic_number}*.md")
 
 # Deduplicate (prefer BmadDocs version if same story exists in both)
 story_files = deduplicate_by_story_id(story_files)
@@ -339,8 +339,8 @@ if story_files.length == 0:
     Searched:
     ├── ${bmad_docs}/dev-story-${epic_number}-*.md
     ├── ${bmad_docs}/*epic-${epic_number}*.md
-    ├── _bmad-output/implementation-artifacts/dev-story-${epic_number}-*.md
-    └── _bmad-output/implementation-artifacts/*epic-${epic_number}*.md
+    ├── docs/implementation-artifacts/dev-story-${epic_number}-*.md
+    └── docs/implementation-artifacts/*epic-${epic_number}*.md
     Run /sprintplan to create dev stories first.
   exit: 1
 
@@ -835,7 +835,7 @@ refreshed_context = invoke("constitution.resolve-context")
 if refreshed_context.status != "parse_error":
   session.constitutional_context = refreshed_context
 
-code_review_path = "_bmad-output/implementation-artifacts/code-review-${id}.md"
+code_review_path = "docs/implementation-artifacts/code-review-${id}.md"
 code_review_compliance = invoke("constitution.compliance-check")
 params:
   artifact_path: ${code_review_path}
@@ -886,14 +886,14 @@ read_and_follow: "_bmad/core/workflows/party-mode/workflow.md"
 params:
   input_file: ${code_review_path}
   artifacts_path: ${target_path}
-  output_file: "_bmad-output/implementation-artifacts/party-mode-review-${story_id}.md"
+  output_file: "docs/implementation-artifacts/party-mode-review-${story_id}.md"
   constitutional_context: ${session.constitutional_context}
   complexity_tracking: ${complexity_tracking}
 
 if party_mode.status not in ["pass", "complete"]:
   error: |
     Party mode teardown found unresolved issues for story ${story_id}.
-    Address _bmad-output/implementation-artifacts/party-mode-review-${story_id}.md and fix issues.
+    Address docs/implementation-artifacts/party-mode-review-${story_id}.md and fix issues.
   # Fix loop: attempt to resolve and re-review (within max_review_passes)
   halt: true
 
@@ -959,7 +959,7 @@ invoke: git-orchestration.commit-and-push
 params:
   paths:
     - "_bmad-output/lens-work/initiatives/${initiative.id}.yaml"
-    - "_bmad-output/implementation-artifacts/"
+    - "docs/implementation-artifacts/"
   message: "[lens-work] /dev: Story ${story_id} complete — ${story_idx + 1}/${session.story_files.length}"
   branch: "${initiative.initiative_root}-dev"
 
@@ -997,7 +997,7 @@ params:
   scope: "epic"
   epic_id: ${current_epic_id}
   stories: "${docs_path}/stories.md"
-  implementation_artifacts: "_bmad-output/implementation-artifacts/"
+  implementation_artifacts: "docs/implementation-artifacts/"
   constitutional_context: ${constitutional_context}
 
 if epic_adversarial.status in ["blocked", "fail", "failed"]:
@@ -1013,13 +1013,13 @@ params:
   input_file: "${docs_path}/epics.md"
   focus_epic: ${current_epic_id}
   artifacts_path: ${session.target_path}
-  output_file: "_bmad-output/implementation-artifacts/epic-${current_epic_id}-party-mode-review.md"
+  output_file: "docs/implementation-artifacts/epic-${current_epic_id}-party-mode-review.md"
   constitutional_context: ${constitutional_context}
 
 if party_mode.status not in ["pass", "complete"]:
   error: |
     ⛔ MANDATORY GATE — Epic party-mode teardown found unresolved issues for ${current_epic_id}.
-    Address _bmad-output/implementation-artifacts/epic-${current_epic_id}-party-mode-review.md and re-run /dev.
+    Address docs/implementation-artifacts/epic-${current_epic_id}-party-mode-review.md and re-run /dev.
   halt: true
 
 # Push epic branch and create epic-level PR → initiative branch in target repo
@@ -1161,7 +1161,7 @@ params:
   paths:
     - "_bmad-output/lens-work/initiatives/${initiative.id}.yaml"
     - "_bmad-output/lens-work/event-log.jsonl"
-    - "_bmad-output/implementation-artifacts/"
+    - "docs/implementation-artifacts/"
   message: "[lens-work] /dev: Dev Implementation — ${initiative.id} — ${story_id}"
   branch: "${initiative.initiative_root}-dev"
 ```
@@ -1212,7 +1212,7 @@ Throughout `/dev`, the user may work in TargetProjects for actual coding, but al
 | Write code / create files | TargetProjects/${repo} (session.target_path) | **ONLY here** |
 | Run /dev commands | BMAD directory | Control plane |
 | Read framework files | lens.core/ | **READ-ONLY — never write here** |
-| State tracking writes | _bmad-output/ | Sprint status, initiative config |
+| State tracking writes | docs/implementation-artifacts and _bmad-output/lens-work/ | Implementation artifacts, sprint status, initiative config |
 
 **⚠️ lens.core is NEVER the implementation target.** It is a read-only authority repo containing BMAD framework code.
 | Code review | BMAD directory |
@@ -1224,11 +1224,11 @@ Throughout `/dev`, the user may work in TargetProjects for actual coding, but al
 
 | Artifact | Location |
 |----------|----------|
-| Code Review Report | `_bmad-output/implementation-artifacts/code-review-${id}.md` |
-| Party Mode Review Report | `_bmad-output/implementation-artifacts/party-mode-review-${story_id}.md` |
-| Epic Party Mode Review Report | `_bmad-output/implementation-artifacts/epic-*-party-mode-review.md` |
+| Code Review Report | `docs/implementation-artifacts/code-review-${id}.md` |
+| Party Mode Review Report | `docs/implementation-artifacts/party-mode-review-${story_id}.md` |
+| Epic Party Mode Review Report | `docs/implementation-artifacts/epic-*-party-mode-review.md` |
 | Complexity Tracking | `{bmad_docs}/complexity-tracking.md` |
-| Retro Notes | `_bmad-output/implementation-artifacts/retro-${id}.md` |
+| Retro Notes | `docs/implementation-artifacts/retro-${id}.md` |
 | Initiative State | `_bmad-output/lens-work/initiatives/${id}.yaml` |
 | Event Log | `_bmad-output/lens-work/event-log.jsonl` |
 
