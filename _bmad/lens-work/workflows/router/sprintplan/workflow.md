@@ -81,9 +81,7 @@ docs_path = initiative.docs.path
 repo_docs_path = "docs/${initiative.docs.domain}/${initiative.docs.service}/${initiative.docs.repo}"
 
 if docs_path == null or docs_path == "":
-  docs_path = "docs/planning-artifacts/"
-  repo_docs_path = null
-  warning: "⚠️ DEPRECATED: Initiative missing docs.path configuration."
+  FAIL("❌ Initiative docs.path is required. Run /lens migrate <initiative-id> before /sprintplan.")
 
 output_path = "${docs_path}/reviews/"
 ensure_directory("${docs_path}/reviews/")

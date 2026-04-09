@@ -82,10 +82,7 @@ docs_path = initiative.docs.path
 repo_docs_path = "docs/${initiative.docs.domain}/${initiative.docs.service}/${initiative.docs.repo}"
 
 if docs_path == null or docs_path == "":
-  docs_path = "docs/planning-artifacts/"
-  repo_docs_path = null
-  warning: "⚠️ DEPRECATED: Initiative missing docs.path configuration."
-  warning: "  → Run: /lens migrate <initiative-id> to add docs.path"
+  FAIL("❌ Initiative docs.path is required. Run /lens migrate <initiative-id> before /devproposal.")
 
 output_path = docs_path
 ensure_directory(output_path)
@@ -241,11 +238,7 @@ required_artifacts:
 
 for artifact in required_artifacts:
   if not file_exists(artifact):
-    legacy_path = artifact.replace("${docs_path}/", "_bmad-output/planning-artifacts/")
-    if file_exists(legacy_path):
-      warning: "Found artifact at legacy path: ${legacy_path}. Consider migrating."
-    else:
-      warning: "Required artifact not found: ${artifact}."
+    warning: "Required artifact not found: ${artifact}."
 ```
 
 ### 1a. Constitution Compliance Gate (ADVISORY)

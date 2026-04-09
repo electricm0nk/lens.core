@@ -80,10 +80,7 @@ docs_path = initiative.docs.path
 repo_docs_path = "docs/${initiative.docs.domain}/${initiative.docs.service}/${initiative.docs.repo}"
 
 if docs_path == null or docs_path == "":
-  docs_path = "docs/planning-artifacts/"
-  repo_docs_path = null
-  warning: "⚠️ DEPRECATED: Initiative missing docs.path configuration."
-  warning: "  → Run: /lens migrate <initiative-id> to add docs.path"
+  FAIL("❌ Initiative docs.path is required. Run /lens migrate <initiative-id> before /dev.")
 
 # NOTE: docs_path is READ-ONLY in /dev — used for context loading (S11)
 # Dev outputs go to docs/implementation-artifacts/
@@ -137,12 +134,9 @@ if session.target_path contains "bmad.lens.release":
     Expected target_path pattern: TargetProjects/{domain}/{service}/{repo-name}
 
 # === Context Loader (S11: Context Enhancement) ===
-if docs_path != "docs/planning-artifacts/":
-  architecture = load_if_exists("${docs_path}/architecture.md")
-  stories = load_if_exists("${docs_path}/stories.md")
-  planning_context = { architecture: architecture, stories: stories }
-else:
-  planning_context = null
+architecture = load_if_exists("${docs_path}/architecture.md")
+stories = load_if_exists("${docs_path}/stories.md")
+planning_context = { architecture: architecture, stories: stories }
 
 # REQ-7/REQ-9: Validate previous phase (sprintplan) and audience promotion
 prev_phase = "sprintplan"
