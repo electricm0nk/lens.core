@@ -170,6 +170,12 @@ track: {track}
 language: unknown
 created: {ISO8601}
 initiative_root: {domain}-{service}-{feature}
+docs:
+  path: docs/{domain}/{service}/{feature}
+  domain: {domain}
+  service: {service}
+  repo: {feature}
+  bmad_docs: docs/{domain}/{service}/{feature}/stories
 ```
 
 Path (see Step 3 for scope-specific paths):

@@ -4,7 +4,7 @@
 ## Project Configuration
 
 - **Project**: lens.core
-- **User**: CrisWeber
+- **User**: {user_name}
 - **Communication Language**: English
 - **Document Output Language**: English
 - **User Skill Level**: intermediate
