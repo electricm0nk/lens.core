@@ -1,16 +1,15 @@
 ---
+agent: bmad-agent-lens-work-lens
+model: Claude Sonnet 4.6 (copilot)
+description: 'Start DevProposal phase — epics, stories, readiness check (John/PM, medium audience)'
 ---
 
-# /devproposal Prompt
+# lens-work.devproposal (Stub)
 
-Route to the devproposal phase workflow via the @lens phase router.
+> **This is a stub.** Load and execute the full prompt from the release module.
+> All `_bmad/` paths in the full prompt are relative to `lens.core/` — do NOT resolve paths against the user's main project repo.
 
-1. Run preflight before routing:
-   1. Execute shared preflight from `_bmad/lens-work/workflows/includes/preflight.md`.
-   2. If preflight reports missing authority repos, stop and direct the user to run `/onboard` first.
-2. Load `lifecycle.yaml` from the lens-work module
-3. Invoke phase routing for `devproposal`:
-   - Validate predecessor `techplan` PR is merged
-   - Validate audience level is `medium` (promotion from small required)
-   - Create phase branch `{initiative-root}-medium-devproposal`
-4. Execute `workflows/router/devproposal/workflow.md`
+```
+Read and follow all instructions in: lens.core/_bmad/lens-work/prompts/lens-work.devproposal.prompt.md
+```
+
