@@ -77,7 +77,10 @@ Load the initiative config from `_bmad-output/lens-work/initiatives/{domain}/{se
 
 Derive output path for artifacts:
 ```yaml
-output_path = "_bmad-output/lens-work/initiatives/{domain}/{service}/phases/preplan/"
+docs_path = initiative.docs.path
+if docs_path == null or docs_path == "":
+  FAIL("❌ Initiative docs.path is required. Run /lens migrate <initiative-id> before /preplan.")
+output_path = docs_path
 ensure_directory(output_path)
 ```
 
@@ -314,9 +317,9 @@ params:
 
 | Artifact | Location | Required |
 |----------|----------|----------|
-| Product Brief | `phases/preplan/product-brief.md` | Yes |
-| Research Summary | `phases/preplan/research-summary.md` | If research selected |
-| Brainstorm Notes | `phases/preplan/brainstorm-notes.md` | If brainstorming selected |
+| Product Brief | `${output_path}/product-brief.md` | Yes |
+| Research Summary | `${output_path}/research-summary.md` | If research selected |
+| Brainstorm Notes | `${output_path}/brainstorm-notes.md` | If brainstorming selected |
 | Initiative State | `_bmad-output/lens-work/initiatives/${id}.yaml` | Yes |
 
 ---

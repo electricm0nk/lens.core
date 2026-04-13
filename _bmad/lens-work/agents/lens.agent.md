@@ -90,6 +90,19 @@ A phase can only start if its predecessor is complete. Phase completion is deter
 - `devproposal` requires audience = medium → if still small, tell user to run `/promote`
 - `sprintplan` requires audience = large → if not large, tell user to run `/promote`
 
+### Phase and Promotion PR Behavior — CRITICAL
+
+> **AUTO-MERGE IS MANDATORY. NEVER STOP AND WAIT.**
+>
+> `lifecycle.yaml` (`pr_behavior.auto_merge: true`) and Org Constitution Art. 14 both require that ALL lens-work planning lifecycle PRs be created AND immediately merged without manual review. This applies to:
+> - Phase completion PRs: `{root}-{audience}-{phase}` → `{root}-{audience}`
+> - Audience promotion PRs: `{root}-{current}` → `{root}-{next}`
+> - Final initiative PR: `{root}-base` → `main`
+>
+> After creating any PR, immediately execute `gh pr merge {number} --merge`. Do NOT report the PR URL as a "hard gate" or tell the user to merge it manually. Do NOT stop. Continue executing the workflow epilogue (branch cleanup, state updates) immediately after merge confirmation.
+>
+> The ONLY reason to stop is a gate check failure BEFORE the PR is created (e.g., missing artifact, failed constitution check). Once a PR is created, merge it.
+
 ### Phase Branch Creation
 
 When routing is validated, create the phase branch:
@@ -181,7 +194,8 @@ Tables MUST use ≤5 columns for chat panel rendering compatibility.
 | `lens.core/` | READ-ONLY — never write during initiative work |
 | Governance repo | READ-ONLY — can propose PR but never direct write |
 | `.github/` | Not modified during initiative work |
-| `_bmad-output/lens-work/initiatives/` | WRITE — all initiative artifacts go here |
+| `docs/{domain}/{service}/{feature}/` | WRITE — planning artifacts go here |
+| `_bmad-output/lens-work/` | WRITE — state only (initiative config, event log, profile, timestamps) |
 
 ## Session Preflight
 

@@ -1062,7 +1062,7 @@ Before ANY write operation (commit, file creation, file modification), validate 
 | `lens.core/` | ALWAYS blocked for initiative writes | `❌ BLOCK — release repo is read-only at runtime. Write to _bmad-output/lens-work/initiatives/ instead.` |
 | Governance repo path | Blocked except governance PR proposals | `❌ BLOCK — governance lives in its own repo. Propose changes via governance PR.` |
 | `.github/` | Not modified during initiative work | `❌ BLOCK — adapter layer is not modified during initiative work.` |
-| Outside `_bmad-output/lens-work/initiatives/` | Blocked for initiative workflow writes | `❌ BLOCK — initiative artifacts must be written to _bmad-output/lens-work/initiatives/{path}/` |
+| Outside docs feature path and `_bmad-output/lens-work/` state paths | Blocked for initiative workflow writes | `❌ BLOCK — planning artifacts must be written under docs/{domain}/{service}/{feature}/ and state must remain in _bmad-output/lens-work/.` |
 | Outside `session.target_path` during `/dev` | Blocked — dev writes scoped to target repo only | `❌ BLOCK — /dev writes MUST be within target repo: {session.target_path}. Attempted: {path}` |
 
 ### Validation Algorithm
@@ -1075,8 +1075,10 @@ function validate_write_target(path, context):
     if context != "governance-pr-proposal":
       HARD ERROR — governance lives in its own repo
   if context == "initiative-workflow":
-    if path not within "_bmad-output/lens-work/initiatives/":
-      HARD ERROR — initiative artifacts must be in initiative directory
+    if path within "_bmad-output/lens-work/":
+      ALLOW only state files (initiatives/*.yaml, event-log.jsonl, personal/*, governance-setup.yaml)
+    else if path not within "docs/{initiative.docs.domain}/{initiative.docs.service}/{initiative.docs.repo}/":
+      HARD ERROR — planning artifacts must be in docs feature directory
   # Dev Write Guard: /dev phase scopes ALL file writes to the target repo
   if context == "dev-implementation":
     target_abs = resolve_absolute(session.target_path)
