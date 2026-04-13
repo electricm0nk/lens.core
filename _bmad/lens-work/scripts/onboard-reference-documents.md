@@ -1,88 +1,133 @@
-# Reference Document Reconstruction
+# lens-local-setup.py - Reconstruction Reference
 
-This file reconstructs the provided reference images into normalized markdown data.
+This document is reconstructed only from the latest screenshot set and supersedes the earlier image-derived reconstruction.
 
-## Source Set
+## Purpose
 
-- Dashboard odometer/trip display image
-- North Carolina driver license (front) image
-- North Carolina registration card image
-- Vehicle manufacturer VIN/weight label image
+Bootstrap script that sets up a local LENS Workbench environment from scratch.
+Run from the root of a new control repo folder.
 
-## Person (from Driver License)
+Example run:
 
-| Field | Value |
+```bash
+python lens-local-setup.py
+```
+
+## Vocabulary
+
+| Term | Description |
 | --- | --- |
-| Full name | TODD ALLEN HINTZMANN |
-| Address line 1 | 1104 E 35TH ST |
-| City | CHARLOTTE |
-| State | NC |
-| ZIP | 28205-1615 |
-| Date of birth | 04/27/1973 |
-| License state | NC |
-| License number | 00021666224 |
-| Class | C |
-| Restrictions | 1 |
-| Sex | M |
-| Height | 5-09 |
-| Weight (lb) | 160 |
-| Eyes | BLU |
-| Hair | BAL |
-| Issue date | 05/23/2024 |
-| Expiration date | 04/27/2032 |
+| root | The folder where the script is executed. Local workspace container; not committed to source control. |
+| lens.core | Read-only LENS release module cloned from central repo. Contains agents, prompts, workflows, scripts. |
+| lens-governance | Governance repo containing constitutional rules, policies, shared docs; cloned under TargetProjects. |
+| TargetProjects | Local folder that holds operating repo clones, organized by domain/service/repo. |
 
-## Vehicle (from Registration + VIN Label)
+## Final Directory Structure After Setup
 
-| Field | Value |
-| --- | --- |
-| VIN | 1F64F5DY4D0A12593 |
-| Year | 2014 |
-| Make | THOR |
-| Plate number | 04M8SM |
-| Style | HC |
-| Fuel | G |
-| GVWR | 7258 kg (16000 lb) |
-| Front GAWR | 2948 kg (6500 lb) |
-| Rear GAWR | 4990 kg (11000 lb) |
-| Tire spec | 245/70R19.5G 133/132L |
-| Rim spec | 19.5x6.75 |
-| Tire pressure (cold) | 565 kPa / 82 PSI |
+```text
+<root>/
+|- lens.core/              # LENS release module (read-only)
+|- .github/                # GitHub Copilot adapter copied from lens.core
+|- docs/                   # Planning and initiative artifacts
+|- TargetProjects/
+|  |- <project-control-lib-repo>/
+|  |- <governance-repo>/
+```
 
-## Registration (from NC Registration Card)
+## CLI Arguments
 
-| Field | Value |
-| --- | --- |
-| State | NC |
-| Plate number | 04M8SM |
-| Plate expiration | 08/31/2025 |
-| Inspection due | 08/31/2025 |
-| VIN | 1F64F5DY4D0A12593 |
-| Year | 2014 |
-| Make | THOR |
-| Style | HC |
-| Fuel | G |
-| Total fee | 587.23 |
-| County | MECKL |
-| Classification | GREAT SMOKY MOUNTAINS PAS |
-| Policy number | 2012607039 |
-| Insurance company | NATIONAL GENERAL INSURANCE CO |
-| Insurance authorized in NC | Yes |
+| Argument | Default | Description |
+| --- | --- | --- |
+| --folder-name | lens.core | Target folder name to clone lens.core into |
+| --repo-url | (prompted/default URL) | Remote URL for lens.core |
+| --branch | (prompted) | Branch to clone; when omitted script fetches branch list and prompts |
+| --project-url | (prompted/default URL) | URL of project/control library repo |
+| --governance-url | (prompted/default URL) | URL of governance repo |
 
-## Odometer Snapshot (from Dashboard)
+## Script Logic - Step by Step
 
-| Field | Value |
-| --- | --- |
-| Odometer | 42575 mi |
-| Trip | 14.1 |
+1. Parse arguments using argparse with the five arguments listed above.
+2. Fetch available branches from --repo-url via git ls-remote --heads.
+3. Parse branch names from refs/heads/<branch> and build a list.
+4. Prompt for branch if --branch is not provided:
+- Default to beta when present, otherwise first branch.
+- Show numbered list and highlight default.
+- Accept Enter for default, number, or exact branch name.
+- Exit on invalid selection.
+5. Clone lens.core into <root>/<folder-name>:
+- If target exists, delete first (force_rmtree for read-only safety).
+- Use git clone -b <branch> <repo-url> <target>.
+6. Copy <folder-name>/.github to <root>/.github:
+- Delete destination first if it exists.
+- Use shutil.copytree.
+- Warn and continue if source .github does not exist.
+7. Create standard directories:
+- docs/
+- TargetProjects/
+8. Clone project/control library repo:
+- Use --project-url or prompt/default.
+- Derive destination from URL last path segment (strip .git).
+- Clone into TargetProjects/<derived-name>/.
+9. Clone governance repo:
+- Same behavior as step 8 using --governance-url.
+- Destination: TargetProjects/<derived-name>/.
+10. Print completion status.
 
-## Normalized JSON Seed Alignment
+## Helper Functions
 
-The values above are the source used for the onboarding seed in:
-- `_bmad-output/lens-work/personal/reference-seed.json` (written by onboard.py)
-- `REFERENCE_SEED` constant in `onboard.py`
+- force_rmtree(path):
+- Wraps shutil.rmtree with onerror handler.
+- Uses os.chmod(path, stat.S_IWRITE) before retry for read-only files.
 
-## Data Quality Notes
+- run(cmd, **kwargs):
+- Thin wrapper around subprocess.run.
+- Returns CompletedProcess.
 
-- Values are reconstructed from images and normalized for consistency.
-- Date formats in this markdown preserve the card display style where shown.
-- The onboarding seed uses ISO dates where practical (for machine-friendly processing).
+- fetch_branches(repo_url):
+- Executes git ls-remote --heads <repo_url>.
+- Parses branch names with regex refs/heads/(.+)$.
+- Returns list[str].
+
+- prompt_branch(branches, preselected):
+- Returns preselected immediately when provided.
+- Otherwise prints numbered list, highlights default, reads input.
+- Returns selected branch name.
+
+- main():
+- Entry point orchestrating all setup steps.
+
+## Imports Required
+
+```python
+import argparse
+import os
+import re
+import shutil
+import stat
+import subprocess
+import sys
+```
+
+## Console Color Constants
+
+```python
+CYAN = "\033[96m"
+YELLOW = "\033[93m"
+GREEN = "\033[92m"
+RED = "\033[91m"
+RESET = "\033[0m"
+```
+
+Used via f-strings such as f"{CYAN}message{RESET}".
+
+## Guidance Notes
+
+- control repo: Each work pod should have its own root workspace; share only when cross-pod collaboration requires joint planning artifacts.
+- governance repo: Default can be broadly universal; customize only when teams need lifecycle, constitutional, or policy variation.
+
+## Entry Point Guard
+
+```python
+if __name__ == "__main__":
+    main()
+```
