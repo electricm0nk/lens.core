@@ -16,7 +16,7 @@ The top-level workspace. This is an **operational workspace**, not a code repo. 
 - `_bmad-output/` — All lens-work runtime state (initiative configs, preflight timestamps, personal profile)
 - `setup-control-repo.ps1` — Bootstrap script
 
-**Write rules:** Planning phase prompts write artifacts here (under `_bmad-output/lens-work/initiatives/`). The `/dev` prompt writes ONLY state-tracking files here (`_bmad-output/` sprint-status, state).
+**Write rules:** Planning phase prompts write artifacts to `docs/{domain}/{service}/{feature}/`. `_bmad-output/` stores state-tracking only (initiative configs, event-log, profile, preflight timestamps).
 
 ### 2. Release Repo (`lens.core/`)
 
@@ -43,6 +43,7 @@ Each subfolder is an independent git repo with its own `.git/`, branches, and re
 | `_bmad/lens-work/...` in a prompt or workflow | `lens.core/_bmad/lens-work/...` |
 | `_bmad/_config/...` | `lens.core/_bmad/_config/...` |
 | `_bmad-output/...` | Workspace root `_bmad-output/...` (control repo) |
+| `docs/{domain}/{service}/{feature}/...` | Workspace root docs path for planning artifacts |
 | `{target_projects_path}/{domain}/{service}/{repo}/` | The cloned code repo for that initiative |
 | `.github/prompts/lens-work.*.prompt.md` | Stub files — always follow the redirect to `lens.core/_bmad/lens-work/prompts/...` |
 | `.github/skills/lens-work-*/SKILL.md` | Stub files — always follow the redirect to `lens.core/_bmad/lens-work/skills/...` |
@@ -52,7 +53,7 @@ Each subfolder is an independent git repo with its own `.git/`, branches, and re
 When `lens-work.dev.prompt.md` is executed:
 
 1. **Implementation code** (new files, edits, commits, branches, PRs) goes ONLY in the target repo under the configured `target_projects_path`
-2. **State tracking** (sprint-status, initiative state) goes ONLY in `_bmad-output/`
+2. **State tracking** (sprint-status, initiative state, event-log) goes ONLY in `_bmad-output/`
 3. **NEVER modify** the control repo root, `.github/`, `lens.core/`, or any other repo
 
 This is enforced by the dev workflow's "Write Scope — Target Repo Only" rule: before implementing any task, verify the working directory is inside the target repo. If verification fails, implementation is blocked.
@@ -79,4 +80,4 @@ The lens-work module manages a 5-phase planning lifecycle with audience-based pr
 - All `.github/prompts/` and `.github/skills/` files are **stubs** that redirect to full implementations in `lens.core/`
 - Never duplicate module content into `.github/` — module updates propagate through path references
 - The `lens.core/` submodule branch matters: on `alpha`, run full preflight at most once per hour; on `beta`, run full preflight at most once every 3 hours
-- Initiative artifacts live at `_bmad-output/lens-work/initiatives/{domain}/{service}/{feature}.yaml`
+- Initiative state lives at `_bmad-output/lens-work/initiatives/{domain}/{service}/{feature}.yaml`

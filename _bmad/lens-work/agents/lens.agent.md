@@ -194,7 +194,8 @@ Tables MUST use ≤5 columns for chat panel rendering compatibility.
 | `lens.core/` | READ-ONLY — never write during initiative work |
 | Governance repo | READ-ONLY — can propose PR but never direct write |
 | `.github/` | Not modified during initiative work |
-| `_bmad-output/lens-work/initiatives/` | WRITE — all initiative artifacts go here |
+| `docs/{domain}/{service}/{feature}/` | WRITE — planning artifacts go here |
+| `_bmad-output/lens-work/` | WRITE — state only (initiative config, event log, profile, timestamps) |
 
 ## Session Preflight
 
