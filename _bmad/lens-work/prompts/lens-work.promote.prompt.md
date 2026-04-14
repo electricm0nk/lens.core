@@ -1,27 +1,15 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
+description: 'Promote current audience to next level with gate checks'
 ---
 
-# /promote Prompt
+# lens-work.promote (Stub)
 
-Promote the current initiative from the current audience tier to the next.
+> **This is a stub.** Load and execute the full prompt from the release module.
+> All `_bmad/` paths in the full prompt are relative to `lens.core/` — do NOT resolve paths against the user's main project repo.
 
-## Routing
+```
+Read and follow all instructions in: lens.core/_bmad/lens-work/prompts/lens-work.promote.prompt.md
+```
 
-1. Run preflight before promotion routing:
-	1. Execute shared preflight from `_bmad/lens-work/workflows/includes/preflight.md`.
-	2. If preflight reports missing authority repos, stop and direct the user to run `/onboard` first.
-2. Load `lifecycle.yaml` from the lens-work module
-3. Use `git-state` skill → `current-initiative` to confirm on an initiative branch
-4. Use `git-state` skill → `current-audience` to determine the current audience
-5. Look up the next audience in the audience chain: small → medium → large → base
-6. If already at `base`: report "Initiative is at the final audience — no promotion available"
-7. Otherwise: execute `workflows/core/audience-promotion/workflow.md`
-
-## Error Handling
-
-| Condition | Response |
-|-----------|----------|
-| Not on an initiative branch | `❌ Not on an initiative branch. Use /switch to select an initiative first.` |
-| Already at base audience | `✅ Initiative is at final audience — no further promotion needed.` |
-| Dirty working directory | Defer to git-orchestration dirty handling (commit/stash/abort) |

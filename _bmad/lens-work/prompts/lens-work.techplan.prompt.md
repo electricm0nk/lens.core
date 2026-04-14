@@ -1,17 +1,15 @@
 ---
+agent: bmad-agent-lens-work-lens
 model: Claude Sonnet 4.6 (copilot)
+description: 'Start TechPlan phase — architecture document, technical decisions (Winston/Architect)'
 ---
 
-# /techplan Prompt
+# lens-work.techplan (Stub)
 
-Route to the techplan phase workflow via the @lens phase router.
+> **This is a stub.** Load and execute the full prompt from the release module.
+> All `_bmad/` paths in the full prompt are relative to `lens.core/` — do NOT resolve paths against the user's main project repo.
 
-1. Run preflight before routing:
-   1. Execute shared preflight from `_bmad/lens-work/workflows/includes/preflight.md`.
-   2. If preflight reports missing authority repos, stop and direct the user to run `/onboard` first.
-2. Load `lifecycle.yaml` from the lens-work module
-3. Invoke phase routing for `techplan`:
-   - Validate predecessor `businessplan` PR is merged
-   - Check current track includes `techplan` in its phases
-   - Create phase branch `{initiative-root}-small-techplan`
-4. Execute `workflows/router/techplan/workflow.md`
+```
+Read and follow all instructions in: lens.core/_bmad/lens-work/prompts/lens-work.techplan.prompt.md
+```
+
